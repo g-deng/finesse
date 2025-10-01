@@ -6,7 +6,7 @@ type VHBlock = {
   shape: "I" | "S" | "Z";
   ori: "H" | "V";
   x: number;
-  y?: number;
+  limX?: number;
   spawnY?: number;
 }
 
@@ -14,14 +14,14 @@ type NESWBlock = {
   shape: "T" | "J" | "L";
   dir: "N" | "E" | "S" | "W";
   x: number;
-  y?: number;
+  limX?: number;
   spawnY?: number;
 }
 
 type OBlock = {
   shape: "O";
   x: number;
-  y?: number;
+  limX?: number;
   spawnY?: number;
 }
 

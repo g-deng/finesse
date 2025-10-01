@@ -1,5 +1,5 @@
 import { palette } from "./colors";
-import type { Shape, Direction, Orientation } from "./types";
+import type { Shape, Direction, Orientation } from "../types";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
 const ctx = canvas.getContext("2d")!;

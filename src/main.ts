@@ -38,6 +38,28 @@ function processAction(block: Block, action: Action) {
         const idx = dirOrder.indexOf(block.dir!);
         block.dir = dirOrder[(idx + 1) % 4];
       }
+      break;
+    case "ccw":
+      if (block.shape === "O") return;
+      if (isVHBlock(block)) {
+        block = block as VHBlock;
+        block.ori = block.ori === "H" ? "V" : "H";
+      } else {
+        block = block as NESWBlock;
+        const dirOrder: ("N" | "E" | "S" | "W")[] = ["N", "E", "S", "W"];
+        const idx = dirOrder.indexOf(block.dir!);
+        block.dir = dirOrder[(idx - 1 + 4) % 4];
+      }
+      break;
+    case "180":
+      if (block.shape === "O") return;
+      if (isNESWBlock(block)) {
+        block = block as NESWBlock;
+        const dirOrder: ("N" | "E" | "S" | "W")[] = ["N", "E", "S", "W"];
+        const idx = dirOrder.indexOf(block.dir!);
+        block.dir = dirOrder[(idx + 2) % 4];
+      }
+      break;
   }
 }
 

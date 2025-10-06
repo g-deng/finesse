@@ -5,7 +5,7 @@ for (let i = 1; i <= 10; i++) {
   targets.push({ shape: "I", ori: "V", x: i, limX: 10, spawnY: 17 });
 }
 for (let i = 1; i <= 9; i++) {
-  targets.push({ shape: "O", x: i, spawnY: 19 });
+  targets.push({ shape: "O", x: i, limX: 9, spawnY: 19 });
   targets.push({ shape: "T", dir: "E", x: i, limX: 9, spawnY: 18 });
   targets.push({ shape: "T", dir: "W", x: i, limX: 9, spawnY: 18 });
   targets.push({ shape: "J", dir: "N", x: i, limX: 9, spawnY: 18 });
@@ -60,13 +60,13 @@ function getSpawnBlock(shape: string): Block | null {
   }
 }
 
-var x = -1;
+// var x = -1;
 function getNewTarget(): Block | null {
   if (targets.length === 0) return null;
-  // const randomIndex = Math.floor(Math.random() * targets.length);
-  x = (x + 1) % targets.length;
-  return targets[x];
-  // return { ...targets[randomIndex] };
+  const randomIndex = Math.floor(Math.random() * targets.length);
+  // x = (x + 1) % targets.length;
+  // return targets[x];
+  return { ...targets[randomIndex] };
 }
 
 export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock };

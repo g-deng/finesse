@@ -51,8 +51,8 @@ function draw_o(x: number, y: number) {
 function draw_t(x: number, y: number, dir: Direction) {
   switch (dir) {
     case "N":
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid * 3, grid);
-      ctx.fillRect((x) * grid, (20 - y) * grid, grid, grid);
+      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid * 3, grid);
+      ctx.fillRect((x) * grid, (20 - y - 1) * grid, grid, grid);
       break;
     case "E":
       ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid * 3);

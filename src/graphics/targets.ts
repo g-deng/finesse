@@ -88,51 +88,50 @@ function draw_t_target(x: number, dir: Direction) {
   ctx.stroke();
 }
 
-function draw_j_target(x: number, dir: Direction) {
+function draw_l_target(x: number, dir: Direction) {
   ctx.beginPath();
   switch (dir) {
     case "N":
-      ctx.moveTo((x - 1) * grid, 19 * grid);
+      ctx.moveTo((x - 1) * grid, 20 * grid);
       ctx.lineTo((x - 1) * grid, 17 * grid);
       ctx.lineTo((x) * grid, 17 * grid);
-      ctx.lineTo((x) * grid, 18 * grid);
-      ctx.lineTo((x + 1) * grid, 18 * grid);
+      ctx.lineTo((x) * grid, 19 * grid);
       ctx.lineTo((x + 1) * grid, 19 * grid);
-      ctx.lineTo((x - 1) * grid, 19 * grid);
+      ctx.lineTo((x + 1) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 20 * grid);
       break;
     case "E":
       ctx.moveTo((x - 1) * grid, 18 * grid);
       ctx.lineTo((x + 2) * grid, 18 * grid);
-      ctx.lineTo((x + 2) * grid, 19 * grid);
-      ctx.lineTo((x + 1) * grid, 19 * grid);
+      ctx.lineTo((x + 2) * grid, 20 * grid);
       ctx.lineTo((x + 1) * grid, 20 * grid);
-      ctx.lineTo((x - 1) * grid, 20 * grid);
+      ctx.lineTo((x + 1) * grid, 19 * grid);
+      ctx.lineTo((x - 1) * grid, 19 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
       break;
     case "S":
-      ctx.moveTo((x + 1) * grid, 19 * grid);
+      ctx.moveTo((x - 1) * grid, 17 * grid);
       ctx.lineTo((x + 1) * grid, 17 * grid);
-      ctx.lineTo((x) * grid, 17 * grid);
+      ctx.lineTo((x + 1) * grid, 20 * grid);
+      ctx.lineTo((x) * grid, 20 * grid);
       ctx.lineTo((x) * grid, 18 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
-      ctx.lineTo((x - 1) * grid, 19 * grid);
-      ctx.lineTo((x + 1) * grid, 19 * grid);
+      ctx.lineTo((x - 1) * grid, 17 * grid);
       break;
     case "W":
-      // L-shaped outline pointing up-left
-      ctx.moveTo((x + 2) * grid, 18 * grid);
+      ctx.moveTo((x - 1) * grid, 20 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
-      ctx.lineTo((x - 1) * grid, 19 * grid);
+      ctx.lineTo((x) * grid, 18 * grid);
       ctx.lineTo((x) * grid, 19 * grid);
-      ctx.lineTo((x) * grid, 20 * grid);
+      ctx.lineTo((x + 2) * grid, 19 * grid);
       ctx.lineTo((x + 2) * grid, 20 * grid);
-      ctx.lineTo((x + 2) * grid, 18 * grid);
+      ctx.lineTo((x - 1) * grid, 20 * grid);
       break;
   }
   ctx.stroke();
 }
 
-function draw_l_target(x: number, dir: Direction) {
+function draw_j_target(x: number, dir: Direction) {
   ctx.beginPath();
   switch (dir) {
     case "N":

@@ -10,12 +10,14 @@ const keyMap: Record<string, Action> = {
   KeyS: "180",
 };
 
-export const pressed = new Set<Action>();
+export const held = new Set<string>();
+const pressedActions: Action[] = [];
 
 document.addEventListener("keydown", (e) => {
   const action = keyMap[e.code];
-  if (action) {
-    pressed.add(action);
+  if (action && !held.has(e.code)) {
+    held.add(e.code);
+    pressedActions.push(action);
     e.preventDefault();
   }
 });
@@ -23,7 +25,13 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("keyup", (e) => {
   const action = keyMap[e.code];
   if (action) {
-    pressed.delete(action);
+    held.delete(e.code);
     e.preventDefault();
   }
 });
+
+export function consumePressedActions(): Action[] {
+  const actions = [...pressedActions];
+  pressedActions.length = 0;
+  return actions;
+}

@@ -69,7 +69,7 @@ function draw_t(x: number, y: number, dir: Direction) {
   }
 }
 
-function draw_j(x: number, y: number, dir: Direction) {
+function draw_l(x: number, y: number, dir: Direction) {
   switch (dir) {
     case "N":
       ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid * 3);
@@ -90,7 +90,7 @@ function draw_j(x: number, y: number, dir: Direction) {
   }
 }
 
-function draw_l(x: number, y: number, dir: Direction) {
+function draw_j(x: number, y: number, dir: Direction) {
   switch (dir) {
     case "N":
       ctx.fillRect((x) * grid , (20 - y - 2) * grid, grid, grid * 3);

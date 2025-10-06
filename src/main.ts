@@ -1,7 +1,7 @@
 import "./graphics/style.css";
 import { drawGrid } from "./graphics/grid.ts";
 import { drawBlock } from "./graphics/blocks.ts";
-import { pressed, type Action } from "./keys.ts";
+import { consumePressedActions, type Action } from "./keys.ts";
 import type { Block, NESWBlock, VHBlock } from "./types.ts";
 import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
@@ -55,7 +55,7 @@ function update(delta: number) {
     }
   }
 
-  for (const action of pressed) {
+  for (const action of consumePressedActions()) {
     if (currentBlock) {
       processAction(currentBlock, action);
     }
@@ -71,6 +71,18 @@ function update(delta: number) {
 }
 
 function render() {
+  const blocktext = document.getElementById("block-text")!;
+  if (currentTarget) {
+    if (isVHBlock(currentTarget)) {
+      currentTarget = currentTarget as VHBlock;
+      blocktext.textContent = `target: ${currentTarget.shape} ${currentTarget.ori} @ x=${currentTarget.x}`;
+    } else if (isNESWBlock(currentTarget)) {
+      currentTarget = currentTarget as NESWBlock;
+      blocktext.textContent = `target: ${currentTarget.shape} ${currentTarget.dir} @ x=${currentTarget.x}`;
+    }
+  } else {
+    blocktext.textContent = "target: none";
+  }
   drawGrid();
   if (currentBlock) {
     if (isVHBlock(currentBlock)) {

@@ -139,4 +139,12 @@ function loop(timestamp: number) {
   requestAnimationFrame(loop);
 }
 
-requestAnimationFrame(loop);
+// requestAnimationFrame(loop);
+
+drawGrid();
+
+import { OBlock, IBlock, TBlock, JBlock, LBlock, ZBlock, SBlock} from "./graphics/blocks2.ts";
+
+const myblock = new SBlock();
+myblock.rotateCCW();
+myblock.draw();

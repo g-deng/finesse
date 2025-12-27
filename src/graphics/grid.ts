@@ -15,6 +15,12 @@ export function drawGrid() {
 
   for (let c = 0; c <= cols; c++) {
     const x = c * blockSize;
+    // draw column number
+    ctx.fillStyle = palette.grid;
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText((c + 1).toString(), x + blockSize / 2, canvas.height - 5);
+    
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
@@ -23,6 +29,13 @@ export function drawGrid() {
 
   for (let r = 0; r <= rows; r++) {
     const y = r * blockSize;
+
+    // draw row number
+    ctx.fillStyle = palette.grid;
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText((rows - r).toString(), blockSize / 2, y + blockSize - 5);
+
     ctx.beginPath();
     ctx.moveTo(0, y);
     ctx.lineTo(canvas.width, y);

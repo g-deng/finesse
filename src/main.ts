@@ -1,6 +1,6 @@
 import "./graphics/style.css";
 import { drawGrid } from "./graphics/grid.ts";
-import { drawBlock } from "./graphics/blocks.ts";
+// import { drawBlock } from "./graphics/blocks.ts";
 import { consumePressedActions, type Action } from "./keys.ts";
 import type { Block, NESWBlock, VHBlock } from "./types.ts";
 import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock } from "./combos.ts";
@@ -109,12 +109,12 @@ function render() {
   if (currentBlock) {
     if (isVHBlock(currentBlock)) {
       currentBlock = currentBlock as VHBlock;
-      drawBlock(currentBlock.shape, currentBlock.x, dropY, currentBlock.ori);
+      // drawBlock(currentBlock.shape, currentBlock.x, dropY, currentBlock.ori);
     } else if (isNESWBlock(currentBlock)) {
       currentBlock = currentBlock as NESWBlock;
-      drawBlock(currentBlock.shape, currentBlock.x, dropY, currentBlock.dir);
+      // drawBlock(currentBlock.shape, currentBlock.x, dropY, currentBlock.dir);
     } else {
-      drawBlock(currentBlock.shape, currentBlock.x, dropY);
+      // drawBlock(currentBlock.shape, currentBlock.x, dropY);
     }
   }
   if (currentTarget) {
@@ -143,7 +143,7 @@ function loop(timestamp: number) {
 
 drawGrid();
 
-import { OBlock, IBlock, TBlock, JBlock, LBlock, ZBlock, SBlock} from "./graphics/blocks2.ts";
+import { OBlock, IBlock, TBlock, JBlock, LBlock, ZBlock, SBlock} from "./graphics/blocks.ts";
 
 const myblock = new SBlock();
 myblock.rotateCCW();

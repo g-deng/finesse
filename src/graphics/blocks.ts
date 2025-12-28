@@ -1,149 +1,432 @@
 import { palette } from "./colors";
-import type { Shape, Direction, Orientation } from "../types";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
 const ctx = canvas.getContext("2d")!;
 const grid = 30;
 
-export function drawBlock(shape: Shape, x: number, y: number, dirOrOri?: Direction | Orientation) {
-  switch (shape) {
-    case "O":
-      ctx.fillStyle = palette.O;
-      draw_o(x, y);
-      break;
-    case "T":
-      ctx.fillStyle = palette.T;
-      draw_t(x, y, dirOrOri as Direction);
-      break;
-    case "J":
-      ctx.fillStyle = palette.J;
-      draw_j(x, y, dirOrOri as Direction);
-      break;
-    case "L":
-      ctx.fillStyle = palette.L;
-      draw_l(x, y, dirOrOri as Direction);
-      break;
-    case "I":
-      ctx.fillStyle = palette.I;
-      draw_i(x, y, dirOrOri as Orientation);
-      break;
-    case "S":
-      ctx.fillStyle = palette.S;
-      draw_s(x, y, dirOrOri as Orientation);
-      break;
-    case "Z":
-      ctx.fillStyle = palette.Z;
-      draw_z(x, y, dirOrOri as Orientation);
-      break;
+/**
+ * Draw a filled rectangle given grid coordinates (1-indexed, bottom-left origin)
+ */
+function fillRect(x: number, y: number, w: number, h: number) {
+  ctx.fillRect((x - 1) * grid, (20 - y - h + 1) * grid, w * grid, h * grid);
+}
+
+abstract class Block {
+  protected x: number; // left boundary (orientation dependent) (1 -> 10 left)
+  protected y: number; // bottom boundary of block (orientation dependent) (1 -> 20 top)
+  protected orientation: "N" | "E" | "S" | "W";
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+    this.orientation = "N";
+  }
+  abstract draw(): void;
+  abstract moveLeft(): void;
+  abstract moveRight(): void;
+  setY(y: number): void {
+    this.y = y;
+  }
+  abstract rotateCW(): void;
+  rotateCCW() {
+    this.rotateCW();
+    this.rotateCW();
+    this.rotateCW();
+  }
+  rotate180() {
+    this.rotateCW();
+    this.rotateCW();
   }
 }
 
-export function drawGhost(shape: Shape, x: number, y: number, dirOrOri?: Direction | Orientation) {
-  ctx.globalAlpha = 0.3;
-  drawBlock(shape, x, y, dirOrOri);
-  ctx.globalAlpha = 1.0;
+class OBlock extends Block {
+  constructor() {
+    super(5, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.O;
+    fillRect(this.x, this.y, 2, 2);
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    if (this.x < 9) this.x += 1;
+  }
+  rotateCW() {}
 }
 
-function draw_o(x: number, y: number) {
-  ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, 2*grid, 2*grid);
-}
-
-function draw_t(x: number, y: number, dir: Direction) {
-  switch (dir) {
-    case "N":
-      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid * 3, grid);
-      ctx.fillRect((x) * grid, (20 - y - 1) * grid, grid, grid);
-      break;
-    case "E":
-      ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid * 3);
-      ctx.fillRect((x) * grid, (20 - y - 1) * grid, grid, grid);
-      break;
-    case "S":
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid * 3, grid);
-      ctx.fillRect((x) * grid, (20 - y) * grid, grid, grid);
-      break;
-    case "W":
-      ctx.fillRect((x) * grid, (20 - y - 2) * grid, grid, grid * 3);
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid, grid);
-      break;
+class IBlock extends Block {
+  constructor() {
+    super(4, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.I;
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        fillRect(this.x, this.y, 4, 1);
+        break;
+      case "E":
+      case "W":
+        fillRect(this.x, this.y, 1, 4);
+        break;
+    }
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        if (this.x < 7) this.x += 1;
+        break;
+      case "E":
+      case "W":
+        if (this.x < 10) this.x += 1;
+        break;
+    }
+  }
+  rotateCW() {
+    switch (this.orientation) {
+      case "N":
+        this.x += 2;
+        this.y -= 2;
+        this.orientation = "E";
+        if (this.x > 10) this.x = 10;
+        break;
+      case "E":
+        this.x -= 2;
+        this.y += 1;
+        this.orientation = "S";
+        if (this.x > 7) this.x = 7;
+        break;
+      case "S":
+        this.x += 1;
+        this.y -= 1;
+        this.orientation = "W";
+        if (this.x > 10) this.x = 10;
+        break;
+      case "W":
+        this.x -= 1;
+        this.y += 2;
+        this.orientation = "N";
+        if (this.x > 7) this.x = 7;
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
   }
 }
 
-function draw_l(x: number, y: number, dir: Direction) {
-  switch (dir) {
-    case "N":
-      ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid * 3);
-      ctx.fillRect((x) * grid, (20 - y) * grid, grid, grid);
-      break;
-    case "E":
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid * 3, grid);
-      ctx.fillRect((x + 1) * grid, (20 - y) * grid, grid, grid);
-      break;
-    case "S":
-      ctx.fillRect((x) * grid, (20 - y - 2) * grid, grid, grid * 3);
-      ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid);
-      break;
-    case "W":
-      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid * 3, grid);
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid, grid);
-      break;
+class TBlock extends Block {
+  constructor() {
+    super(4, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.T;
+    switch (this.orientation) {
+      case "N":
+        fillRect(this.x, this.y, 3, 1);
+        fillRect(this.x + 1, this.y + 1, 1, 1);
+        break;
+      case "E":
+        fillRect(this.x, this.y, 1, 3);
+        fillRect(this.x + 1, this.y + 1, 1, 1);
+        break;
+      case "S":
+        fillRect(this.x, this.y + 1, 3, 1);
+        fillRect(this.x + 1, this.y, 1, 1);
+        break;
+      case "W":
+        fillRect(this.x + 1, this.y, 1, 3);
+        fillRect(this.x, this.y + 1, 1, 1);
+        break;
+    }
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        if (this.x < 8) this.x += 1;
+        break;
+      case "E":
+      case "W":
+        if (this.x < 9) this.x += 1;
+        break;
+    }
+  }
+  rotateCW() {
+    switch (this.orientation) {
+      case "N":
+        this.x += 1;
+        this.y -= 1;
+        this.orientation = "E";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "E":
+        this.x -= 1;
+        this.orientation = "S";
+        if (this.x < 1) this.x = 1;
+        break;
+      case "S":
+        this.orientation = "W";
+        break;
+      case "W":
+        this.y += 1;
+        this.orientation = "N";
+        break;
+    }
   }
 }
 
-function draw_j(x: number, y: number, dir: Direction) {
-  switch (dir) {
-    case "N":
-      ctx.fillRect((x) * grid , (20 - y - 2) * grid, grid, grid * 3);
-      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid, grid);
-      break;
-    case "E":
-      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid * 3, grid);
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid, grid);
-      break;
-    case "S":
-      ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid * 3);
-      ctx.fillRect((x) * grid, (20 - y - 2) * grid, grid, grid);
-      break;
-    case "W":
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid * 3, grid);
-      ctx.fillRect((x + 1) * grid, (20 - y) * grid, grid, grid);
-      break;
+class JBlock extends Block {
+  constructor() {
+    super(4, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.J;
+    switch (this.orientation) {
+      case "N":
+        fillRect(this.x, this.y, 3, 1);
+        fillRect(this.x, this.y + 1, 1, 1);
+        break;
+      case "E":
+        fillRect(this.x, this.y, 1, 3);
+        fillRect(this.x + 1, this.y + 2, 1, 1);
+        break;
+      case "S":
+        fillRect(this.x, this.y + 1, 3, 1);
+        fillRect(this.x + 2, this.y, 1, 1);
+        break;
+      case "W":
+        fillRect(this.x + 1, this.y, 1, 3);
+        fillRect(this.x, this.y, 1, 1);
+        break;
+    }
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        if (this.x < 8) this.x += 1;
+        break;
+      case "E":
+      case "W":
+        if (this.x < 9) this.x += 1;
+        break;
+    }
+  }
+  rotateCW() {
+    switch (this.orientation) {
+      case "N":
+        this.x += 1;
+        this.y -= 1;
+        this.orientation = "E";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "E":
+        this.x -= 1;
+        this.orientation = "S";
+        if (this.x < 1) this.x = 1;
+        break;
+      case "S":
+        this.orientation = "W";
+        break;
+      case "W":
+        this.y += 1;
+        this.orientation = "N";
+        break;
+    }
   }
 }
 
-function draw_i(x: number, y: number, ori: Orientation) {
-  switch (ori) {
-    case "H":
-      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid * 4, grid);
-      break;
-    case "V":
-      ctx.fillRect((x - 1) * grid, (20 - y - 3) * grid, grid, grid * 4);
-      break;
+class LBlock extends Block {
+  constructor() {
+    super(4, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.L;
+    switch (this.orientation) {
+      case "N":
+        fillRect(this.x, this.y, 3, 1);
+        fillRect(this.x + 2, this.y + 1, 1, 1);
+        break;
+      case "E":
+        fillRect(this.x, this.y, 1, 3);
+        fillRect(this.x + 1, this.y, 1, 1);
+        break;
+      case "S":
+        fillRect(this.x, this.y + 1, 3, 1);
+        fillRect(this.x, this.y, 1, 1);
+        break;
+      case "W":
+        fillRect(this.x + 1, this.y, 1, 3);
+        fillRect(this.x, this.y + 2, 1, 1);
+        break;
+    }
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        if (this.x < 8) this.x += 1;
+        break;
+      case "E":
+      case "W":
+        if (this.x < 9) this.x += 1;
+        break;
+    }
+  }
+  rotateCW() {
+    switch (this.orientation) {
+      case "N":
+        this.x += 1;
+        this.y -= 1;
+        this.orientation = "E";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "E":
+        this.x -= 1;
+        this.orientation = "S";
+        if (this.x < 1) this.x = 1;
+        break;
+      case "S":
+        this.orientation = "W";
+        break;
+      case "W":
+        this.y += 1;
+        this.orientation = "N";
+        break;
+    }
   }
 }
 
-function draw_s(x: number, y: number, ori: Orientation) {
-  switch (ori) {
-    case "H":
-      ctx.fillRect((x - 1) * grid, (20 - y) * grid, grid * 2, grid);
-      ctx.fillRect((x) * grid, (20 - y - 1) * grid, grid * 2, grid);
-      break;
-    case "V":
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid, grid * 2);
-      ctx.fillRect((x) * grid, (20 - y - 2) * grid, grid, grid * 2);
-      break;
+class ZBlock extends Block {
+  constructor() {
+    super(4, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.Z;
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        fillRect(this.x, this.y + 1, 2, 1);
+        fillRect(this.x + 1, this.y, 2, 1);
+        break;
+      case "E":
+      case "W":
+        fillRect(this.x, this.y, 1, 2);
+        fillRect(this.x + 1, this.y + 1, 1, 2);
+        break;
+    }
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        if (this.x < 8) this.x += 1;
+        break;
+      case "E":
+      case "W":
+        if (this.x < 9) this.x += 1;
+        break;
+    }
+  }
+  rotateCW() {
+    switch (this.orientation) {
+      case "N":
+        this.x += 1;
+        this.y -= 1;
+        this.orientation = "E";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "E":
+        this.x -= 1;
+        this.orientation = "S";
+        if (this.x < 1) this.x = 1;
+        break;
+      case "S":
+        this.orientation = "W";
+        break;
+      case "W":
+        this.y += 1;
+        this.orientation = "N";
+        break;
+    }
   }
 }
 
-function draw_z(x: number, y: number, ori: Orientation) {
-  switch (ori) {
-    case "H":
-      ctx.fillRect((x) * grid, (20 - y) * grid, grid * 2, grid);
-      ctx.fillRect((x - 1) * grid, (20 - y - 1) * grid, grid * 2, grid);
-      break;
-    case "V":
-      ctx.fillRect((x) * grid, (20 - y - 1) * grid, grid, grid * 2);
-      ctx.fillRect((x - 1) * grid, (20 - y - 2) * grid, grid, grid * 2);
-      break;
+
+class SBlock extends Block {
+  constructor() {
+    super(4, 19);
+  }
+  draw() {
+    ctx.fillStyle = palette.S;
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        fillRect(this.x + 1, this.y + 1, 2, 1);
+        fillRect(this.x, this.y, 2, 1);
+        break;
+      case "E":
+      case "W":
+        fillRect(this.x + 1, this.y, 1, 2);
+        fillRect(this.x, this.y + 1, 1, 2);
+        break;
+    }
+  }
+  moveLeft() {
+    if (this.x > 1) this.x -= 1;
+  }
+  moveRight() {
+    switch (this.orientation) {
+      case "N":
+      case "S":
+        if (this.x < 8) this.x += 1;
+        break;
+      case "E":
+      case "W":
+        if (this.x < 9) this.x += 1;
+        break;
+    }
+  }
+  rotateCW() {
+    switch (this.orientation) {
+      case "N":
+        this.x += 1;
+        this.y -= 1;
+        this.orientation = "E";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "E":
+        this.x -= 1;
+        this.orientation = "S";
+        if (this.x < 1) this.x = 1;
+        break;
+      case "S":
+        this.orientation = "W";
+        break;
+      case "W":
+        this.y += 1;
+        this.orientation = "N";
+        break;
+    }
   }
 }
+
+export { Block, OBlock, IBlock, TBlock, JBlock, LBlock, ZBlock, SBlock };
+

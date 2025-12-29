@@ -2,7 +2,7 @@ type Direction = "N" | "E" | "S" | "W";
 type Orientation = "H" | "V";
 type Shape = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
 
-type VHBlock = {
+type VHTarget = {
   shape: "I" | "S" | "Z";
   ori: "H" | "V";
   x: number;
@@ -10,7 +10,7 @@ type VHBlock = {
   spawnY?: number;
 }
 
-type NESWBlock = {
+type NESWTarget = {
   shape: "T" | "J" | "L";
   dir: "N" | "E" | "S" | "W";
   x: number;
@@ -18,13 +18,13 @@ type NESWBlock = {
   spawnY?: number;
 }
 
-type OBlock = {
+type OTarget = {
   shape: "O";
   x: number;
   limX?: number;
   spawnY?: number;
 }
 
-type Block = VHBlock | NESWBlock | OBlock;
+type Target = VHTarget | NESWTarget | OTarget;
 
-export type { Shape, Direction, Orientation, VHBlock, NESWBlock, OBlock, Block };
+export type { Shape, Direction, Orientation, VHTarget, NESWTarget, OTarget, Target };

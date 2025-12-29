@@ -1,6 +1,7 @@
-import type { Block } from "./types";
+import type { Target } from "./types";
+import { Block, IBlock, OBlock, TBlock, ZBlock, SBlock, JBlock, LBlock } from "./graphics/blocks";
 
-const targets: Block[] = [];
+const targets: Target[] = [];
 for (let i = 1; i <= 10; i++) {
   targets.push({ shape: "I", ori: "V", x: i, limX: 10, spawnY: 17 });
 }
@@ -29,39 +30,39 @@ for (let i = 1; i <= 7; i++) {
   targets.push({ shape: "I", ori: "H", x: i, limX: 7, spawnY: 20 });
 }
 
-targets.sort((a: Block, b: Block) => a.shape.localeCompare(b.shape));
+targets.sort((a: Target, b: Target) => a.shape.localeCompare(b.shape));
 
-function isVHBlock(block: Block) {
+function isVHBlock(block: Target) {
   return block.shape === "I" || block.shape === "S" || block.shape === "Z";
 }
 
-function isNESWBlock(block: Block) {
+function isNESWBlock(block: Target) {
   return block.shape === "T" || block.shape === "J" || block.shape === "L";
 }
 
 function getSpawnBlock(shape: string): Block | null {
   switch (shape) {
     case "I":
-      return { shape: "I", ori: "H", x: 4, limX: 10, spawnY: 17 } as Block;
+      return new IBlock();
     case "O":
-      return { shape: "O", x: 5, spawnY: 19 } as Block;
+      return new OBlock();
     case "T":
-      return { shape: "T", dir: "N", x: 4, limX: 9, spawnY: 18 } as Block;
+      return new TBlock();
     case "S":
-      return { shape: "S", ori: "H", x: 4, limX: 9, spawnY: 18 } as Block;
+      return new SBlock();
     case "Z":
-      return { shape: "Z", ori: "H", x: 4, limX: 9, spawnY: 18 } as Block;
+      return new ZBlock();
     case "J":
-      return { shape: "J", dir: "E", x: 4, limX: 9, spawnY: 18 } as Block;
+      return new JBlock();
     case "L":
-      return { shape: "L", dir: "W", x: 4, limX: 9, spawnY: 18 } as Block;
+      return new LBlock();
     default:
       return null;
   }
 }
 
 // var x = -1;
-function getNewTarget(): Block | null {
+function getNewTarget(): Target | null {
   if (targets.length === 0) return null;
   const randomIndex = Math.floor(Math.random() * targets.length);
   // x = (x + 1) % targets.length;

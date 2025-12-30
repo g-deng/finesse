@@ -9,20 +9,20 @@ for (let i = 1; i <= 9; i++) {
   targets.push({ shape: "O", x: i, limX: 9, spawnY: 19 });
   targets.push({ shape: "T", dir: "E", x: i, limX: 9, spawnY: 18 });
   targets.push({ shape: "T", dir: "W", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "J", dir: "N", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "J", dir: "S", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "L", dir: "N", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "L", dir: "S", x: i, limX: 9, spawnY: 18 });
+  targets.push({ shape: "J", dir: "E", x: i, limX: 9, spawnY: 19 });
+  targets.push({ shape: "J", dir: "W", x: i, limX: 9, spawnY: 19 });
+  targets.push({ shape: "L", dir: "E", x: i, limX: 9, spawnY: 19 });
+  targets.push({ shape: "L", dir: "W", x: i, limX: 9, spawnY: 19 });
   targets.push({ shape: "S", ori: "V", x: i, limX: 9, spawnY: 18 });
   targets.push({ shape: "Z", ori: "V", x: i, limX: 9, spawnY: 18 });
 }
 for (let i = 1; i <= 8; i++) {
   targets.push({ shape: "T", dir: "N", x: i, limX: 8, spawnY: 19 });
   targets.push({ shape: "T", dir: "S", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "J", dir: "E", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "J", dir: "W", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "L", dir: "E", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "L", dir: "W", x: i, limX: 8, spawnY: 19 });
+  targets.push({ shape: "J", dir: "N", x: i, limX: 8, spawnY: 18 });
+  targets.push({ shape: "J", dir: "S", x: i, limX: 8, spawnY: 18 });
+  targets.push({ shape: "L", dir: "N", x: i, limX: 8, spawnY: 18 });
+  targets.push({ shape: "L", dir: "S", x: i, limX: 8, spawnY: 18 });
   targets.push({ shape: "S", ori: "H", x: i, limX: 8, spawnY: 19 });
   targets.push({ shape: "Z", ori: "H", x: i, limX: 8, spawnY: 19 });
 }
@@ -61,13 +61,13 @@ function getSpawnBlock(shape: string): Block | null {
   }
 }
 
-// var x = -1;
+var x = -1;
 function getNewTarget(): Target | null {
   if (targets.length === 0) return null;
-  const randomIndex = Math.floor(Math.random() * targets.length);
-  // x = (x + 1) % targets.length;
-  // return targets[x];
-  return { ...targets[randomIndex] };
+  // const randomIndex = Math.floor(Math.random() * targets.length);
+  x = (x + 1) % targets.length;
+  return targets[x];
+  // return { ...targets[randomIndex] };
 }
 
 export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock };

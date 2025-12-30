@@ -93,6 +93,15 @@ function draw_l_target(x: number, dir: Direction) {
   switch (dir) {
     case "N":
       ctx.moveTo((x - 1) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 19 * grid);
+      ctx.lineTo((x + 1) * grid, 19 * grid);
+      ctx.lineTo((x + 1) * grid, 18 * grid);
+      ctx.lineTo((x + 2) * grid, 18 * grid);
+      ctx.lineTo((x + 2) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 20 * grid);
+      break;
+    case "E":
+      ctx.moveTo((x - 1) * grid, 20 * grid);
       ctx.lineTo((x - 1) * grid, 17 * grid);
       ctx.lineTo((x) * grid, 17 * grid);
       ctx.lineTo((x) * grid, 19 * grid);
@@ -100,16 +109,16 @@ function draw_l_target(x: number, dir: Direction) {
       ctx.lineTo((x + 1) * grid, 20 * grid);
       ctx.lineTo((x - 1) * grid, 20 * grid);
       break;
-    case "E":
+    case "S":
       ctx.moveTo((x - 1) * grid, 18 * grid);
       ctx.lineTo((x + 2) * grid, 18 * grid);
-      ctx.lineTo((x + 2) * grid, 20 * grid);
-      ctx.lineTo((x + 1) * grid, 20 * grid);
-      ctx.lineTo((x + 1) * grid, 19 * grid);
-      ctx.lineTo((x - 1) * grid, 19 * grid);
+      ctx.lineTo((x + 2) * grid, 19 * grid);
+      ctx.lineTo((x) * grid, 19 * grid);
+      ctx.lineTo((x) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 20 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
       break;
-    case "S":
+    case "W":
       ctx.moveTo((x - 1) * grid, 17 * grid);
       ctx.lineTo((x + 1) * grid, 17 * grid);
       ctx.lineTo((x + 1) * grid, 20 * grid);
@@ -117,15 +126,6 @@ function draw_l_target(x: number, dir: Direction) {
       ctx.lineTo((x) * grid, 18 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
       ctx.lineTo((x - 1) * grid, 17 * grid);
-      break;
-    case "W":
-      ctx.moveTo((x - 1) * grid, 20 * grid);
-      ctx.lineTo((x - 1) * grid, 18 * grid);
-      ctx.lineTo((x) * grid, 18 * grid);
-      ctx.lineTo((x) * grid, 19 * grid);
-      ctx.lineTo((x + 2) * grid, 19 * grid);
-      ctx.lineTo((x + 2) * grid, 20 * grid);
-      ctx.lineTo((x - 1) * grid, 20 * grid);
       break;
   }
   ctx.stroke();
@@ -135,15 +135,6 @@ function draw_j_target(x: number, dir: Direction) {
   ctx.beginPath();
   switch (dir) {
     case "N":
-      ctx.moveTo((x + 1) * grid, 17 * grid);
-      ctx.lineTo((x + 1) * grid, 20 * grid);
-      ctx.lineTo((x - 1) * grid, 20 * grid);
-      ctx.lineTo((x - 1) * grid, 19 * grid);
-      ctx.lineTo((x) * grid, 19 * grid);
-      ctx.lineTo((x) * grid, 17 * grid);
-      ctx.lineTo((x + 1) * grid, 17 * grid);
-      break;
-    case "E":
       ctx.moveTo((x - 1) * grid, 18 * grid);
       ctx.lineTo((x - 1) * grid, 20 * grid);
       ctx.lineTo((x + 2) * grid, 20 * grid);
@@ -152,7 +143,7 @@ function draw_j_target(x: number, dir: Direction) {
       ctx.lineTo((x) * grid, 18 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
       break;
-    case "S":
+    case "E":
       ctx.moveTo((x - 1) * grid, 17 * grid);
       ctx.lineTo((x - 1) * grid, 20 * grid);
       ctx.lineTo((x) * grid, 20 * grid);
@@ -161,7 +152,7 @@ function draw_j_target(x: number, dir: Direction) {
       ctx.lineTo((x + 1) * grid, 17 * grid);
       ctx.lineTo((x - 1) * grid, 17 * grid);
       break;
-    case "W":
+    case "S":
       ctx.moveTo((x - 1) * grid, 18 * grid);
       ctx.lineTo((x + 2) * grid, 18 * grid);
       ctx.lineTo((x + 2) * grid, 20 * grid);
@@ -169,6 +160,15 @@ function draw_j_target(x: number, dir: Direction) {
       ctx.lineTo((x + 1) * grid, 19 * grid);
       ctx.lineTo((x - 1) * grid, 19 * grid);
       ctx.lineTo((x - 1) * grid, 18 * grid);
+      break;
+    case "W":
+      ctx.moveTo((x + 1) * grid, 17 * grid);
+      ctx.lineTo((x + 1) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 19 * grid);
+      ctx.lineTo((x) * grid, 19 * grid);
+      ctx.lineTo((x) * grid, 17 * grid);
+      ctx.lineTo((x + 1) * grid, 17 * grid);
       break;
   }
   ctx.stroke();
@@ -200,15 +200,15 @@ function draw_s_target(x: number, ori: Orientation) {
       ctx.lineTo((x - 1) * grid, 20 * grid);
       break;
     case "V":
-      ctx.moveTo((x - 1) * grid, 18 * grid);
-      ctx.lineTo((x - 1) * grid, 20 * grid);
-      ctx.lineTo((x) * grid, 20 * grid);
+      ctx.moveTo((x - 1) * grid, 17 * grid);
+      ctx.lineTo((x - 1) * grid, 19 * grid);
       ctx.lineTo((x) * grid, 19 * grid);
-      ctx.lineTo((x + 1) * grid, 19 * grid);
-      ctx.lineTo((x + 1) * grid, 17 * grid);
-      ctx.lineTo((x) * grid, 17 * grid);
+      ctx.lineTo((x) * grid, 20 * grid);
+      ctx.lineTo((x + 1) * grid, 20 * grid);
+      ctx.lineTo((x + 1) * grid, 18 * grid);
       ctx.lineTo((x) * grid, 18 * grid);
-      ctx.lineTo((x - 1) * grid, 18 * grid);
+      ctx.lineTo((x) * grid, 17 * grid);
+      ctx.lineTo((x - 1) * grid, 17 * grid);
       break;
   }
   ctx.stroke();
@@ -229,15 +229,15 @@ function draw_z_target(x: number, ori: Orientation) {
       ctx.lineTo((x - 1) * grid, 18 * grid);
       break;
     case "V":
-      ctx.moveTo((x - 1) * grid, 17 * grid);
-      ctx.lineTo((x - 1) * grid, 19 * grid);
+      ctx.moveTo((x + 1) * grid, 17 * grid);
+      ctx.lineTo((x + 1) * grid, 19 * grid);
       ctx.lineTo((x) * grid, 19 * grid);
       ctx.lineTo((x) * grid, 20 * grid);
-      ctx.lineTo((x + 1) * grid, 20 * grid);
-      ctx.lineTo((x + 1) * grid, 18 * grid);
+      ctx.lineTo((x - 1) * grid, 20 * grid);
+      ctx.lineTo((x - 1) * grid, 18 * grid);
       ctx.lineTo((x) * grid, 18 * grid);
       ctx.lineTo((x) * grid, 17 * grid);
-      ctx.lineTo((x - 1) * grid, 17 * grid);
+      ctx.lineTo((x + 1) * grid, 17 * grid);
       break;
   }
   ctx.stroke();

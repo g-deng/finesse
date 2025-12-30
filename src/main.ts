@@ -6,7 +6,7 @@ import { Block } from "./graphics/blocks.ts";
 import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
 
-const dropInterval = 500;
+const dropInterval = 300;
 let currentBlock: Block | null = null;
 let currentTarget: Target | null = null;
 let dropY = 19;
@@ -76,6 +76,8 @@ function render() {
     } else if (isNESWBlock(currentTarget)) {
       currentTarget = currentTarget as NESWTarget;
       blocktext.textContent = `target: ${currentTarget.shape} ${currentTarget.dir} @ x=${currentTarget.x}`;
+    } else {
+      blocktext.textContent = `target: ${currentTarget.shape} @ x=${currentTarget.x}`;
     }
   } else {
     blocktext.textContent = "target: none";

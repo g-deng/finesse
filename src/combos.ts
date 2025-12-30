@@ -32,6 +32,11 @@ for (let i = 1; i <= 7; i++) {
 
 targets.sort((a: Target, b: Target) => a.shape.localeCompare(b.shape));
 
+// print index and shape of each target
+targets.forEach((target, index) => {
+  console.log(`${index}: ${target.shape} @ x=${target.x}`);
+});
+
 function isVHBlock(block: Target) {
   return block.shape === "I" || block.shape === "S" || block.shape === "Z";
 }
@@ -61,13 +66,13 @@ function getSpawnBlock(shape: string): Block | null {
   }
 }
 
-var x = -1;
+// var x = 23;
 function getNewTarget(): Target | null {
   if (targets.length === 0) return null;
-  // const randomIndex = Math.floor(Math.random() * targets.length);
-  x = (x + 1) % targets.length;
-  return targets[x];
-  // return { ...targets[randomIndex] };
+  const randomIndex = Math.floor(Math.random() * targets.length);
+  // x = (x + 1) % targets.length;
+  // return targets[x];
+  return targets[randomIndex];
 }
 
 export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock };

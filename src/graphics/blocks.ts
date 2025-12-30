@@ -27,11 +27,7 @@ abstract class Block {
     this.y = y;
   }
   abstract rotateCW(): void;
-  rotateCCW() {
-    this.rotateCW();
-    this.rotateCW();
-    this.rotateCW();
-  }
+  abstract rotateCCW(): void;
   rotate180() {
     this.rotateCW();
     this.rotateCW();
@@ -53,6 +49,7 @@ class OBlock extends Block {
     if (this.x < 9) this.x += 1;
   }
   rotateCW() {}
+  rotateCCW() {}
 }
 
 class IBlock extends Block {
@@ -117,6 +114,36 @@ class IBlock extends Block {
     if (this.x < 1) this.x = 1;
     if (this.y < 1) this.y = 1;
   }
+  rotateCCW() {
+    switch (this.orientation) {
+      case "E":
+        this.x -= 2;
+        this.y += 2;
+        this.orientation = "N";
+        if (this.x > 7) this.x = 7;
+        break;
+      case "S":
+        this.x += 2;
+        this.y -= 1;
+        this.orientation = "E";
+        if (this.x > 10) this.x = 10;
+        break;
+      case "W":
+        this.x -= 1;
+        this.y += 1;
+        this.orientation = "S";
+        if (this.x > 7) this.x = 7;
+        break;
+      case "N":
+        this.x += 1;
+        this.y -= 2;
+        this.orientation = "W";
+        if (this.x > 10) this.x = 10;
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
+  }
 }
 
 class TBlock extends Block {
@@ -165,12 +192,11 @@ class TBlock extends Block {
         this.x += 1;
         this.y -= 1;
         this.orientation = "E";
-        if (this.x > 8) this.x = 8;
+        if (this.x > 9) this.x = 9;
         break;
       case "E":
         this.x -= 1;
         this.orientation = "S";
-        if (this.x < 1) this.x = 1;
         break;
       case "S":
         this.orientation = "W";
@@ -178,8 +204,35 @@ class TBlock extends Block {
       case "W":
         this.y += 1;
         this.orientation = "N";
+        if (this.x > 8) this.x = 8;
         break;
     }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
+  }
+  rotateCCW() {
+    switch (this.orientation) {
+      case "E":
+        this.x -= 1;
+        this.y += 1;
+        this.orientation = "N";
+        break;
+      case "S":
+        this.x += 1;
+        this.orientation = "E";
+        if (this.x > 9) this.x = 9;
+        break;
+      case "W":
+        this.orientation = "S";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "N":
+        this.y -= 1;
+        this.orientation = "W";
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
   }
 }
 
@@ -229,12 +282,11 @@ class JBlock extends Block {
         this.x += 1;
         this.y -= 1;
         this.orientation = "E";
-        if (this.x > 8) this.x = 8;
+        if (this.x > 9) this.x = 9;
         break;
       case "E":
         this.x -= 1;
         this.orientation = "S";
-        if (this.x < 1) this.x = 1;
         break;
       case "S":
         this.orientation = "W";
@@ -242,8 +294,35 @@ class JBlock extends Block {
       case "W":
         this.y += 1;
         this.orientation = "N";
+        if (this.x > 8) this.x = 8;
         break;
     }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
+  }
+  rotateCCW() {
+    switch (this.orientation) {
+      case "E":
+        this.x -= 1;
+        this.y += 1;
+        this.orientation = "N";
+        break;
+      case "S":
+        this.x += 1;
+        this.orientation = "E";
+        if (this.x > 9) this.x = 9;
+        break;
+      case "W":
+        this.orientation = "S";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "N":
+        this.y -= 1;
+        this.orientation = "W";
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
   }
 }
 
@@ -293,12 +372,11 @@ class LBlock extends Block {
         this.x += 1;
         this.y -= 1;
         this.orientation = "E";
-        if (this.x > 8) this.x = 8;
+        if (this.x > 9) this.x = 9;
         break;
       case "E":
         this.x -= 1;
         this.orientation = "S";
-        if (this.x < 1) this.x = 1;
         break;
       case "S":
         this.orientation = "W";
@@ -306,8 +384,35 @@ class LBlock extends Block {
       case "W":
         this.y += 1;
         this.orientation = "N";
+        if (this.x > 8) this.x = 8;
         break;
     }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
+  }
+  rotateCCW() {
+    switch (this.orientation) {
+      case "E":
+        this.x -= 1;
+        this.y += 1;
+        this.orientation = "N";
+        break;
+      case "S":
+        this.x += 1;
+        this.orientation = "E";
+        if (this.x > 9) this.x = 9;
+        break;
+      case "W":
+        this.orientation = "S";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "N":
+        this.y -= 1;
+        this.orientation = "W";
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
   }
 }
 
@@ -351,12 +456,11 @@ class ZBlock extends Block {
         this.x += 1;
         this.y -= 1;
         this.orientation = "E";
-        if (this.x > 8) this.x = 8;
+        if (this.x > 9) this.x = 9;
         break;
       case "E":
         this.x -= 1;
         this.orientation = "S";
-        if (this.x < 1) this.x = 1;
         break;
       case "S":
         this.orientation = "W";
@@ -364,8 +468,35 @@ class ZBlock extends Block {
       case "W":
         this.y += 1;
         this.orientation = "N";
+        if (this.x > 8) this.x = 8;
         break;
     }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
+  }
+  rotateCCW() {
+    switch (this.orientation) {
+      case "E":
+        this.x -= 1;
+        this.y += 1;
+        this.orientation = "N";
+        break;
+      case "S":
+        this.x += 1;
+        this.orientation = "E";
+        if (this.x > 9) this.x = 9;
+        break;
+      case "W":
+        this.orientation = "S";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "N":
+        this.y -= 1;
+        this.orientation = "W";
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
   }
 }
 
@@ -410,12 +541,11 @@ class SBlock extends Block {
         this.x += 1;
         this.y -= 1;
         this.orientation = "E";
-        if (this.x > 8) this.x = 8;
+        if (this.x > 9) this.x = 9;
         break;
       case "E":
         this.x -= 1;
         this.orientation = "S";
-        if (this.x < 1) this.x = 1;
         break;
       case "S":
         this.orientation = "W";
@@ -423,8 +553,35 @@ class SBlock extends Block {
       case "W":
         this.y += 1;
         this.orientation = "N";
+        if (this.x > 8) this.x = 8;
         break;
     }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
+  }
+  rotateCCW() {
+    switch (this.orientation) {
+      case "E":
+        this.x -= 1;
+        this.y += 1;
+        this.orientation = "N";
+        break;
+      case "S":
+        this.x += 1;
+        this.orientation = "E";
+        if (this.x > 9) this.x = 9;
+        break;
+      case "W":
+        this.orientation = "S";
+        if (this.x > 8) this.x = 8;
+        break;
+      case "N":
+        this.y -= 1;
+        this.orientation = "W";
+        break;
+    }
+    if (this.x < 1) this.x = 1;
+    if (this.y < 1) this.y = 1;
   }
 }
 

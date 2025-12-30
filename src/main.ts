@@ -1,6 +1,6 @@
 import "./graphics/style.css";
 import { drawGrid } from "./graphics/grid.ts";
-import { consumePressedActions, type Action } from "./keys.ts";
+import { consumeSequentials, consumeContinuous, type Action } from "./keys.ts";
 import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
 import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock } from "./combos.ts";
@@ -53,7 +53,14 @@ function update(delta: number) {
     }
   }
 
-  for (const action of consumePressedActions()) {
+  for (const action of consumeSequentials()) {
+    if (currentBlock) {
+      processAction(currentBlock, action);
+    }
+  }
+
+  const { action, count } = consumeContinuous();
+  for (let i = 0; i < count; i++) {
     if (currentBlock) {
       processAction(currentBlock, action);
     }

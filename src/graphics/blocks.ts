@@ -26,6 +26,9 @@ abstract class Block {
   setY(y: number): void {
     this.y = y;
   }
+  getY(): number {
+    return this.y;
+  }
   abstract rotateCW(): void;
   abstract rotateCCW(): void;
   rotate180() {

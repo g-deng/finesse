@@ -45,7 +45,7 @@ function isNESWBlock(block: Target) {
   return block.shape === "T" || block.shape === "J" || block.shape === "L";
 }
 
-function getSpawnBlock(shape: string): Block | null {
+function getSpawnBlock(shape: string): Block {
   switch (shape) {
     case "I":
       return new IBlock();
@@ -62,7 +62,7 @@ function getSpawnBlock(shape: string): Block | null {
     case "L":
       return new LBlock();
     default:
-      return null;
+      return new IBlock();
   }
 }
 

@@ -9,7 +9,6 @@ import { drawTarget } from "./graphics/targets.ts";
 const dropInterval = 300;
 let currentBlock: Block | null = null;
 let currentTarget: Target | null = null;
-let dropY = 19;
 let lastTime = 0;
 let accumulator = 0;
 
@@ -22,10 +21,10 @@ function processAction(block: Block, action: Action) {
       block.moveRight();
       break;
     case "softDrop":
-      dropY = 1;
+      block.setY(1);
       break;
     case "hardDrop":
-      dropY = 1;
+      block.setY(1);
       break;
     case "cw":
       block.rotateCW();
@@ -40,37 +39,33 @@ function processAction(block: Block, action: Action) {
 }
 
 function update(delta: number) {
-  accumulator += delta;
-
-  if (accumulator > dropInterval) {
-    dropY -= Math.floor(accumulator / dropInterval);
-    accumulator = 0;
-    if (currentBlock) currentBlock.setY(dropY);
-    if (dropY < 1) {
-      dropY = 19;
-      currentBlock = null;
-      currentTarget = null;
-    }
-  }
-
-  for (const action of consumeSequentials()) {
-    if (currentBlock) {
-      processAction(currentBlock, action);
-    }
-  }
-
-  const { action, count } = consumeContinuous();
-  for (let i = 0; i < count; i++) {
-    if (currentBlock) {
-      processAction(currentBlock, action);
-    }
-  }
-
-  if (!currentTarget) {
+  if (!currentBlock) {
     currentTarget = getNewTarget();
     currentBlock = getSpawnBlock(currentTarget!.shape);
     console.log("target set:", currentTarget);
     console.log("block set:", currentBlock);
+  }
+  
+  accumulator += delta;
+
+  if (accumulator > dropInterval) {
+    const drop = Math.floor(accumulator / dropInterval);
+    accumulator = 0;
+    if (currentBlock.getY() - drop < 1) {
+      currentBlock = null;
+      currentTarget = null;
+    } else {
+      currentBlock!.setY(currentBlock!.getY() - drop);
+    } 
+  }
+
+  for (const action of consumeSequentials()) {
+    processAction(currentBlock!, action);
+  }
+
+  const { action, count } = consumeContinuous();
+  for (let i = 0; i < count; i++) {
+    processAction(currentBlock!, action);
   }
 }
 

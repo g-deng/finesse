@@ -1,41 +1,116 @@
-import type { Target } from "./types";
-import { Block, IBlock, OBlock, TBlock, ZBlock, SBlock, JBlock, LBlock } from "./graphics/blocks";
+import { type Target } from "./types.js";
+import { type ExtendedAction } from "./keys.js";
+import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock, type Block } from "./graphics/blocks.js";
 
-const targets: Target[] = [];
-for (let i = 1; i <= 10; i++) {
-  targets.push({ shape: "I", ori: "V", x: i, limX: 10, spawnY: 17 });
-}
-for (let i = 1; i <= 9; i++) {
-  targets.push({ shape: "O", x: i, limX: 9, spawnY: 19 });
-  targets.push({ shape: "T", dir: "E", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "T", dir: "W", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "J", dir: "E", x: i, limX: 9, spawnY: 19 });
-  targets.push({ shape: "J", dir: "W", x: i, limX: 9, spawnY: 19 });
-  targets.push({ shape: "L", dir: "E", x: i, limX: 9, spawnY: 19 });
-  targets.push({ shape: "L", dir: "W", x: i, limX: 9, spawnY: 19 });
-  targets.push({ shape: "S", ori: "V", x: i, limX: 9, spawnY: 18 });
-  targets.push({ shape: "Z", ori: "V", x: i, limX: 9, spawnY: 18 });
-}
-for (let i = 1; i <= 8; i++) {
-  targets.push({ shape: "T", dir: "N", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "T", dir: "S", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "J", dir: "N", x: i, limX: 8, spawnY: 18 });
-  targets.push({ shape: "J", dir: "S", x: i, limX: 8, spawnY: 18 });
-  targets.push({ shape: "L", dir: "N", x: i, limX: 8, spawnY: 18 });
-  targets.push({ shape: "L", dir: "S", x: i, limX: 8, spawnY: 18 });
-  targets.push({ shape: "S", ori: "H", x: i, limX: 8, spawnY: 19 });
-  targets.push({ shape: "Z", ori: "H", x: i, limX: 8, spawnY: 19 });
-}
-for (let i = 1; i <= 7; i++) {
-  targets.push({ shape: "I", ori: "H", x: i, limX: 7, spawnY: 20 });
+export type FinesseTarget = { target: Target; moves: ExtendedAction[] };
+
+const targets : FinesseTarget[] = [];
+
+// O block
+targets.push({ target: { shape: "O", x: 1 }, moves: ["dasLeft"] });
+targets.push({ target: { shape: "O", x: 2 }, moves: ["dasLeft", "right"] });
+targets.push({ target: { shape: "O", x: 3 }, moves: ["left", "left"] });
+targets.push({ target: { shape: "O", x: 4 }, moves: ["left"] });
+targets.push({ target: { shape: "O", x: 5 }, moves: [] });
+targets.push({ target: { shape: "O", x: 6 }, moves: ["right"] });
+targets.push({ target: { shape: "O", x: 7 }, moves: ["right", "right"] });
+targets.push({ target: { shape: "O", x: 8 }, moves: ["dasRight", "left"] });
+targets.push({ target: { shape: "O", x: 9 }, moves: ["dasRight"] });
+
+// I block horizontal
+targets.push({ target: { shape: "I", ori: "H", x: 1 }, moves: ["dasLeft"] });
+targets.push({ target: { shape: "I", ori: "H", x: 2 }, moves: ["dasLeft", "right"] });
+targets.push({ target: { shape: "I", ori: "H", x: 3 }, moves: ["left"] });
+targets.push({ target: { shape: "I", ori: "H", x: 4 }, moves: [] });
+targets.push({ target: { shape: "I", ori: "H", x: 5 }, moves: ["right"] });
+targets.push({ target: { shape: "I", ori: "H", x: 6 }, moves: ["right", "right"] });
+targets.push({ target: { shape: "I", ori: "H", x: 7 }, moves: ["dasRight"] });
+
+// I block vertical
+targets.push({ target: { shape: "I", ori: "V", x: 1 }, moves: ["ccw", "dasLeft"] });
+targets.push({ target: { shape: "I", ori: "V", x: 2 }, moves: ["dasLeft", "ccw"] });
+targets.push({ target: { shape: "I", ori: "V", x: 3 }, moves: ["dasLeft", "cw"] });
+targets.push({ target: { shape: "I", ori: "V", x: 4 }, moves: ["ccw", "left"] });
+targets.push({ target: { shape: "I", ori: "V", x: 5 }, moves: ["ccw"] });
+targets.push({ target: { shape: "I", ori: "V", x: 6 }, moves: ["cw"] });
+targets.push({ target: { shape: "I", ori: "V", x: 7 }, moves: ["cw", "right"] });
+targets.push({ target: { shape: "I", ori: "V", x: 8 }, moves: ["dasRight", "ccw"] });
+targets.push({ target: { shape: "I", ori: "V", x: 9 }, moves: ["dasRight", "cw"] });
+targets.push({ target: { shape: "I", ori: "V", x: 10 }, moves: ["cw", "dasRight"] });
+
+// S, Z blocks
+for (const shape of ["S", "Z"] as const) {
+    // vertical
+    targets.push({ target: { shape, ori: "V", x: 1 }, moves: ["dasLeft", "ccw"] });
+    targets.push({ target: { shape, ori: "V", x: 2 }, moves: ["dasLeft", "cw"] });
+    targets.push({ target: { shape, ori: "V", x: 3 }, moves: ["ccw", "left"] });
+    targets.push({ target: { shape, ori: "V", x: 4 }, moves: ["ccw"] });
+    targets.push({ target: { shape, ori: "V", x: 5 }, moves: ["cw"] });
+    targets.push({ target: { shape, ori: "V", x: 6 }, moves: ["cw", "right"] });
+    targets.push({ target: { shape, ori: "V", x: 7 }, moves: ["cw", "right", "right"] });
+    targets.push({ target: { shape, ori: "V", x: 8 }, moves: ["dasRight", "ccw"] });
+    targets.push({ target: { shape, ori: "V", x: 9 }, moves: ["dasRight", "cw"] });
+
+    // horizontal
+    targets.push({ target: { shape, ori: "H", x: 1 }, moves: ["dasLeft"] });
+    targets.push({ target: { shape, ori: "H", x: 2 }, moves: ["dasLeft", "right"] });
+    targets.push({ target: { shape, ori: "H", x: 3 }, moves: ["left"] });
+    targets.push({ target: { shape, ori: "H", x: 4 }, moves: [] });
+    targets.push({ target: { shape, ori: "H", x: 5 }, moves: ["right"] });
+    targets.push({ target: { shape, ori: "H", x: 6 }, moves: ["right", "right"] });
+    targets.push({ target: { shape, ori: "H", x: 7 }, moves: ["dasRight", "left"] });
+    targets.push({ target: { shape, ori: "H", x: 8 }, moves: ["dasRight"] });
 }
 
-targets.sort((a: Target, b: Target) => a.shape.localeCompare(b.shape));
+// T, L, J blocks
 
-// print index and shape of each target
-targets.forEach((target, index) => {
-  console.log(`${index}: ${target.shape} @ x=${target.x}`);
-});
+for (const shape of ["T", "L", "J"] as const) {
+    // north
+    targets.push({ target: { shape, dir: "N", x: 1 }, moves: ["dasLeft"] });
+    targets.push({ target: { shape, dir: "N", x: 2 }, moves: ["dasLeft", "right"] });
+    targets.push({ target: { shape, dir: "N", x: 3 }, moves: ["left"] });
+    targets.push({ target: { shape, dir: "N", x: 4 }, moves: [] });
+    targets.push({ target: { shape, dir: "N", x: 5 }, moves: ["right"] });
+    targets.push({ target: { shape, dir: "N", x: 6 }, moves: ["right", "right"] });
+    targets.push({ target: { shape, dir: "N", x: 7 }, moves: ["dasRight", "left"] });
+    targets.push({ target: { shape, dir: "N", x: 8 }, moves: ["dasRight"] });
+
+    // west
+    targets.push({ target: { shape, dir: "W", x: 1 }, moves: ["dasLeft", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 2 }, moves: ["left", "left", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 3 }, moves: ["left", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 4 }, moves: ["ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 5 }, moves: ["right", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 6 }, moves: ["right", "right", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 7 }, moves: ["dasRight", "left", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 8 }, moves: ["dasRight", "ccw"] });
+    targets.push({ target: { shape, dir: "W", x: 9 }, moves: ["ccw", "dasRight"] });
+
+    // south
+    targets.push({ target: { shape, dir: "S", x: 1 }, moves: ["dasLeft", "180"] });
+    targets.push({ target: { shape, dir: "S", x: 2 }, moves: ["left", "left", "180"] });
+    targets.push({ target: { shape, dir: "S", x: 3 }, moves: ["left", "180"] });
+    targets.push({ target: { shape, dir: "S", x: 4 }, moves: ["180"] });
+    targets.push({ target: { shape, dir: "S", x: 5 }, moves: ["right", "180"] });
+    targets.push({ target: { shape, dir: "S", x: 6 }, moves: ["right", "right", "180"] });
+    targets.push({ target: { shape, dir: "S", x: 7 }, moves: ["dasRight", "left", "180"] });
+    targets.push({ target: { shape, dir: "S", x: 8 }, moves: ["dasRight", "180"] });
+
+    // east
+    targets.push({ target: { shape, dir: "E", x: 1 }, moves: ["cw", "dasLeft"] });
+    targets.push({ target: { shape, dir: "E", x: 2 }, moves: ["dasLeft", "cw"] });
+    targets.push({ target: { shape, dir: "E", x: 3 }, moves: ["left", "left", "cw"] });
+    targets.push({ target: { shape, dir: "E", x: 4 }, moves: ["left", "cw"] });
+    targets.push({ target: { shape, dir: "E", x: 5 }, moves: ["cw"] });
+    targets.push({ target: { shape, dir: "E", x: 6 }, moves: ["right", "cw"] });
+    targets.push({ target: { shape, dir: "E", x: 7 }, moves: ["right", "right", "cw"] });
+    targets.push({ target: { shape, dir: "E", x: 8 }, moves: ["dasRight", "left", "cw"] });
+    targets.push({ target: { shape, dir: "E", x: 9 }, moves: ["dasRight", "cw"] });
+
+}
+
+targets.sort((a: FinesseTarget, b: FinesseTarget) => a.target.shape.localeCompare(b.target.shape));
+
 
 function isVHBlock(block: Target) {
   return block.shape === "I" || block.shape === "S" || block.shape === "Z";
@@ -66,13 +141,13 @@ function getSpawnBlock(shape: string): Block {
   }
 }
 
-// var x = 23;
-function getNewTarget(): Target | null {
+var x = -1;
+function getNewTarget(): FinesseTarget | null {
   if (targets.length === 0) return null;
-  const randomIndex = Math.floor(Math.random() * targets.length);
-  // x = (x + 1) % targets.length;
-  // return targets[x];
-  return targets[randomIndex];
+  // const randomIndex = Math.floor(Math.random() * targets.length);
+  x = (x + 1) % targets.length;
+  return targets[x];
+  // return targets[randomIndex];
 }
 
 export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock };

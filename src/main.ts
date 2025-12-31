@@ -1,6 +1,6 @@
 import "./graphics/style.css";
 import { drawGrid } from "./graphics/grid.ts";
-import { consumeSequentials, consumeContinuous, type Action } from "./keys.ts";
+import { consumeSequentials, consumeContinuous, type Action, type ExtendedAction } from "./keys.ts";
 import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
 import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock } from "./combos.ts";
@@ -9,6 +9,7 @@ import { drawTarget } from "./graphics/targets.ts";
 const dropInterval = 300;
 let currentBlock: Block | null = null;
 let currentTarget: Target | null = null;
+let finesseSequence: ExtendedAction[] | null = null;
 let lastTime = 0;
 let accumulator = 0;
 
@@ -40,7 +41,9 @@ function processAction(block: Block, action: Action) {
 
 function update(delta: number) {
   if (!currentBlock) {
-    currentTarget = getNewTarget();
+    const result = getNewTarget();
+    currentTarget = result?.target || null;
+    finesseSequence = result?.moves || null;
     currentBlock = getSpawnBlock(currentTarget!.shape);
     console.log("target set:", currentTarget);
     console.log("block set:", currentBlock);
@@ -84,6 +87,19 @@ function render() {
   } else {
     blocktext.textContent = "target: none";
   }
+
+  const finesseHint = document.getElementById("finesse-hint")!;
+  if (currentBlock && currentTarget) {
+    if (finesseSequence) {
+      finesseHint.textContent = `finesse hint: ${finesseSequence.join(", ")}`;
+    } else {
+      finesseHint.textContent = `finesse hint: none`;
+    }
+  } else {
+    finesseHint.textContent = `finesse hint: none`;
+  }
+
+
   drawGrid();
   if (currentBlock) currentBlock.draw();
   if (currentTarget) {

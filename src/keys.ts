@@ -1,4 +1,5 @@
 export type Action = "left" | "right" | "cw" | "ccw" | "180" | "softDrop" | "hardDrop";
+export type ExtendedAction = Action | "dasLeft" | "dasRight";
 
 const keyMap : Record<string, Action> = {
   ArrowLeft: "left",

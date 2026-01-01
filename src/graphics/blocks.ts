@@ -20,6 +20,12 @@ abstract class Block {
     this.y = y;
     this.orientation = "N";
   }
+  getX(): number {
+    return this.x;
+  }
+  getDirection(): "N" | "E" | "S" | "W" {
+    return this.orientation;
+  }
   abstract draw(): void;
   abstract moveLeft(): void;
   abstract moveRight(): void;

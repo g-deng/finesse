@@ -1,4 +1,4 @@
-import { type Target } from "./types.js";
+import { type NESWTarget, type Target, type VHTarget } from "./types.js";
 import { type ExtendedAction } from "./keys.js";
 import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock, type Block } from "./graphics/blocks.js";
 
@@ -120,6 +120,33 @@ function isNESWBlock(block: Target) {
   return block.shape === "T" || block.shape === "J" || block.shape === "L";
 }
 
+function blockAtTarget(block: Block, target: Target): boolean {
+  if (isVHBlock(target)) {
+    target = target as VHTarget;
+    const direction = block.getDirection();
+    switch (target.ori) {
+      case "H":
+        if (direction !== "N" && direction !== "S") return false;
+        break;
+      case "V":
+        if (direction !== "E" && direction !== "W") return false;
+        break;
+    }
+    if (block.getX() !== target.x) return false;
+    return true;
+  } else if (isNESWBlock(target)) {
+    target = target as NESWTarget;
+    const direction = block.getDirection();
+    if (direction !== target.dir) return false;
+    if (block.getX() !== target.x) return false;
+    return true;
+  } else {
+    // O block
+    if (block.getX() !== target.x) return false;
+    return true;
+  }
+}
+
 function getSpawnBlock(shape: string): Block {
   switch (shape) {
     case "I":
@@ -150,4 +177,4 @@ function getNewTarget(): FinesseTarget | null {
   // return targets[randomIndex];
 }
 
-export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock };
+export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock, blockAtTarget };

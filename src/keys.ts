@@ -40,7 +40,7 @@ document.addEventListener("keydown", (e) => {
     rightDAS = false;
   }
   unprocessedSequentials.push(action);
-  console.log("Keydown:", e.code, "mapped to action:", action);
+  // console.log("Keydown:", e.code, "mapped to action:", action);
   e.preventDefault();
 });
 

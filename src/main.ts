@@ -3,7 +3,7 @@ import { drawGrid } from "./graphics/grid.ts";
 import { consumeSequentials, consumeContinuous, type Action, type ExtendedAction } from "./keys.ts";
 import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
-import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock } from "./combos.ts";
+import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
 
 const dropInterval = 300;
@@ -57,10 +57,16 @@ function update(delta: number) {
     accumulator = 0;
     if (currentBlock.getY() - drop < 1) {
       // landed
-      currentBlock = null;
-      currentTarget = null;
+      // check if finesse was achieved
+      if (blockAtTarget(currentBlock, currentTarget!) && userSequence.length === finesseSequence!.length + 1) {
+        currentBlock = null;
+        currentTarget = null;
+        finesseSequence = null;
+      } else {
+        currentBlock = getSpawnBlock(currentTarget!.shape);
+        console.log("block set:", currentBlock);
+      }
       userSequence.length = 0;
-      finesseSequence = null;
     } else {
       currentBlock!.setY(currentBlock!.getY() - drop);
     } 

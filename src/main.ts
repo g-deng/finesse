@@ -46,8 +46,6 @@ function update(delta: number) {
     currentTarget = result?.target || null;
     finesseSequence = result?.moves || null;
     currentBlock = getSpawnBlock(currentTarget!.shape);
-    console.log("target set:", currentTarget);
-    console.log("block set:", currentBlock);
   }
   
   accumulator += delta;
@@ -64,7 +62,6 @@ function update(delta: number) {
         finesseSequence = null;
       } else {
         currentBlock = getSpawnBlock(currentTarget!.shape);
-        console.log("block set:", currentBlock);
       }
       userSequence.length = 0;
     } else {
@@ -118,7 +115,11 @@ function render() {
 
 
   drawGrid();
-  if (currentBlock) currentBlock.draw();
+  if (currentBlock) {
+    currentBlock.drawBlock();
+    currentBlock.drawGhost();
+  }
+
   if (currentTarget) {
     if (isVHBlock(currentTarget)) {
       currentTarget = currentTarget as VHTarget;

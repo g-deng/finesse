@@ -12,6 +12,7 @@ let currentTarget: Target | null = null;
 let finesseSequence: ExtendedAction[] | null = null;
 let lastTime = 0;
 let accumulator = 0;
+export const userSequence: ExtendedAction[] = [];
 
 function processAction(block: Block, action: Action) {
   switch (action) {
@@ -55,8 +56,11 @@ function update(delta: number) {
     const drop = Math.floor(accumulator / dropInterval);
     accumulator = 0;
     if (currentBlock.getY() - drop < 1) {
+      // landed
       currentBlock = null;
       currentTarget = null;
+      userSequence.length = 0;
+      finesseSequence = null;
     } else {
       currentBlock!.setY(currentBlock!.getY() - drop);
     } 
@@ -73,30 +77,37 @@ function update(delta: number) {
 }
 
 function render() {
-  const blocktext = document.getElementById("block-text")!;
+  const blockTextElem = document.getElementById("block-text")!;
   if (currentTarget) {
     if (isVHBlock(currentTarget)) {
       currentTarget = currentTarget as VHTarget;
-      blocktext.textContent = `target: ${currentTarget.shape} ${currentTarget.ori} @ x=${currentTarget.x}`;
+      blockTextElem.textContent = `target: ${currentTarget.shape} ${currentTarget.ori} @ x=${currentTarget.x}`;
     } else if (isNESWBlock(currentTarget)) {
       currentTarget = currentTarget as NESWTarget;
-      blocktext.textContent = `target: ${currentTarget.shape} ${currentTarget.dir} @ x=${currentTarget.x}`;
+      blockTextElem.textContent = `target: ${currentTarget.shape} ${currentTarget.dir} @ x=${currentTarget.x}`;
     } else {
-      blocktext.textContent = `target: ${currentTarget.shape} @ x=${currentTarget.x}`;
+      blockTextElem.textContent = `target: ${currentTarget.shape} @ x=${currentTarget.x}`;
     }
   } else {
-    blocktext.textContent = "target: none";
+    blockTextElem.textContent = "target: none";
   }
 
-  const finesseHint = document.getElementById("finesse-hint")!;
+  const finesseHintElem = document.getElementById("finesse-hint")!;
   if (currentBlock && currentTarget) {
     if (finesseSequence) {
-      finesseHint.textContent = `finesse hint: ${finesseSequence.join(", ")}`;
+      finesseHintElem.textContent = `finesse hint: ${finesseSequence.join(", ")}, hardDrop`;
     } else {
-      finesseHint.textContent = `finesse hint: none`;
+      finesseHintElem.textContent = `finesse hint: hardDrop`;
     }
   } else {
-    finesseHint.textContent = `finesse hint: none`;
+    finesseHintElem.textContent = `finesse hint: none`;
+  }
+ 
+  const userSequenceElem = document.getElementById("user-sequence")!;
+  if (userSequence.length > 0) {
+    userSequenceElem.textContent = `your sequence: ${userSequence.join(", ")}`;
+  } else {
+    userSequenceElem.textContent = `your sequence: none`;
   }
 
 

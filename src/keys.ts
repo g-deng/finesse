@@ -1,3 +1,5 @@
+import { userSequence } from "./main";
+
 export type Action = "left" | "right" | "cw" | "ccw" | "180" | "softDrop" | "hardDrop";
 export type ExtendedAction = Action | "dasLeft" | "dasRight";
 
@@ -57,8 +59,19 @@ document.addEventListener("keyup", (e) => {
 
 export function consumeSequentials(): Action[] {
   const actions = [...unprocessedSequentials];
+  userSequence.push(...actions);
   unprocessedSequentials.length = 0;
   return actions;
+}
+
+function popMostRecentAction(action: Action): boolean {
+  for (let i = userSequence.length - 1; i >= 0; i--) {
+    if (userSequence[i] === action) {
+      userSequence.splice(i, 1);
+      return true;
+    }
+  }
+  return false;
 }
 
 export function consumeContinuous(): { action: Action, count: number } {
@@ -75,6 +88,8 @@ export function consumeContinuous(): { action: Action, count: number } {
       leftDAS = true;
       count = Math.floor((now - leftStart - DAS) / ARR);
       leftStart += DAS + count * ARR;
+      popMostRecentAction("left");
+      userSequence.push("dasLeft");
     } 
   } else if (rightStart !== -1) {
     action = "right";
@@ -85,6 +100,8 @@ export function consumeContinuous(): { action: Action, count: number } {
       rightDAS = true;
       count = Math.floor((now - rightStart - DAS) / ARR);
       rightStart += DAS + count * ARR;
+      popMostRecentAction("right");
+      userSequence.push("dasRight");
     }
   }
 

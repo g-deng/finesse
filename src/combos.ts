@@ -1,4 +1,4 @@
-import { type NESWTarget, type Target, type VHTarget } from "./types.js";
+import { type NESWTarget, type Shape, type Target, type VHTarget } from "./types.js";
 import { type ExtendedAction } from "./keys.js";
 import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock, type Block } from "./graphics/blocks.js";
 
@@ -168,13 +168,29 @@ function getSpawnBlock(shape: string): Block {
   }
 }
 
+const activeTargets : FinesseTarget[] = targets.slice();
+
 var x = -1;
-function getNewTarget(): FinesseTarget | null {
-  if (targets.length === 0) return null;
-  // const randomIndex = Math.floor(Math.random() * targets.length);
-  x = (x + 1) % targets.length;
-  return targets[x];
-  // return targets[randomIndex];
+
+function filterActiveTargets(shapes: Shape[]): void {
+  activeTargets.length = 0;
+  for (const target of targets) {
+    if (shapes.indexOf(target.target.shape) !== -1) {
+      activeTargets.push(target);
+    }
+  }
+  x = -1;
 }
 
-export { targets, isVHBlock, isNESWBlock, getNewTarget, getSpawnBlock, blockAtTarget };
+function getNextTarget(): FinesseTarget | null {
+  if (activeTargets.length === 0) return null;
+  x = (x + 1) % activeTargets.length;
+  return activeTargets[x];
+}
+
+function getRandomTarget(): FinesseTarget | null {
+  const randomIndex = Math.floor(Math.random() * activeTargets.length);
+  return activeTargets[randomIndex];
+}
+
+export { targets, isVHBlock, isNESWBlock, filterActiveTargets, getNextTarget, getRandomTarget, getSpawnBlock, blockAtTarget };

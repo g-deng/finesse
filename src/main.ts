@@ -3,9 +3,10 @@ import { drawGrid } from "./graphics/grid.ts";
 import { consumeSequentials, consumeContinuous, type Action, type ExtendedAction } from "./keys.ts";
 import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
-import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget } from "./combos.ts";
+import { getNextTarget, getRandomTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget, type FinesseTarget } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
 import { createIcons, icons } from "lucide";
+import { randomizeMode } from "./settings.ts";
 
 const actionIcon: Record<ExtendedAction, string> = {
   left: "arrow-left",
@@ -31,9 +32,10 @@ let currentTarget: Target | null = null;
 let finesseSequence: ExtendedAction[] | null = null;
 let lastTime = 0;
 let accumulator = 0;
-export const userSequence: ExtendedAction[] = [];
 let currentStreak = 0;
 let bestStreak = 0;
+export const userSequence: ExtendedAction[] = [];
+
 
 function processAction(block: Block, action: Action) {
   switch (action) {
@@ -63,12 +65,17 @@ function processAction(block: Block, action: Action) {
 
 function update(delta: number) {
   if (!currentBlock) {
-    const result = getNewTarget();
+    let result: FinesseTarget | null = null;
+    if (randomizeMode) {
+      result = getRandomTarget();
+    } else {
+      result = getNextTarget();
+    }
     currentTarget = result?.target || null;
     finesseSequence = result?.moves || null;
     currentBlock = getSpawnBlock(currentTarget!.shape);
   }
-  
+
   accumulator += delta;
 
   if (accumulator > dropInterval) {
@@ -92,7 +99,7 @@ function update(delta: number) {
       userSequence.length = 0;
     } else {
       currentBlock!.setY(currentBlock!.getY() - drop);
-    } 
+    }
   }
 
   for (const action of consumeSequentials()) {
@@ -131,7 +138,7 @@ function render() {
   } else {
     blockTextElem.textContent = "target: none";
   }
-const hintMarkup = currentBlock && currentTarget
+  const hintMarkup = currentBlock && currentTarget
     ? toIconHtml([...(finesseSequence ?? []), "hardDrop"])
     : "";
   setIcons(document.getElementById("finesse-hint")!, "finesse hint: ", hintMarkup, { v: lastHintMarkup });

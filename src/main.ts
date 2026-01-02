@@ -6,7 +6,7 @@ import { Block } from "./graphics/blocks.ts";
 import { getNextTarget, getRandomTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget, type FinesseTarget } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
 import { createIcons, icons } from "lucide";
-import { randomizeMode } from "./settings.ts";
+import { randomizeMode, showFinesseHint, showGhost } from "./settings.ts";
 
 const actionIcon: Record<ExtendedAction, string> = {
   left: "arrow-left",
@@ -138,10 +138,15 @@ function render() {
   } else {
     blockTextElem.textContent = "target: none";
   }
-  const hintMarkup = currentBlock && currentTarget
-    ? toIconHtml([...(finesseSequence ?? []), "hardDrop"])
-    : "";
-  setIcons(document.getElementById("finesse-hint")!, "finesse hint: ", hintMarkup, { v: lastHintMarkup });
+
+  if (showFinesseHint) {
+    const hintMarkup = currentBlock && currentTarget
+      ? toIconHtml([...(finesseSequence ?? []), "hardDrop"])
+      : "";
+    setIcons(document.getElementById("finesse-hint")!, "finesse hint: ", hintMarkup, { v: lastHintMarkup });
+  } else {
+    setIcons(document.getElementById("finesse-hint")!, "finesse hint: ", `<i data-lucide="book-heart" class="action-icon"></i>`, { v: lastHintMarkup });
+  }
 
   const userMarkup =
     userSequence.length > 5
@@ -162,7 +167,9 @@ function render() {
   drawGrid();
   if (currentBlock) {
     currentBlock.drawBlock();
-    currentBlock.drawGhost();
+    if (showGhost) {
+      currentBlock.drawGhost();
+    }
   }
 
   if (currentTarget) {

@@ -83,6 +83,14 @@ summary>h2 {
   display: inline;
 }
 
+h3 {
+  margin: 0.7rem 0 0.5rem 0;
+}
+
+h4 {
+  margin: 0.5rem 0 0.2rem 0;
+}
+
 details {
   border: 1px solid gray;
   border-radius: 0.2rem;

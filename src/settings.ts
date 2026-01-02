@@ -31,6 +31,45 @@ targetSelectElement.addEventListener("click", () => {
     filterActiveTargets(selectedShapes);
 });
 
+export let DAS = 170;
+export let ARR = 30;
+
+const dasInput = document.getElementById("das-input") as HTMLInputElement;
+dasInput.addEventListener("input", () => {
+    DAS = parseInt(dasInput.value, 10);
+});
+
+const arrInput = document.getElementById("arr-input") as HTMLInputElement;
+arrInput.addEventListener("input", () => {
+    ARR = parseInt(arrInput.value, 10);
+    if (ARR <= 0) {
+        ARR = 0.001;
+    }
+});
+
+export let showGhost = true;
+export let showGridLines = true;
+export let showGridNumbers = true;
+export let showFinesseHint = true;
+const showGhostInput = document.getElementById("show-ghost") as HTMLInputElement;
+showGhostInput.addEventListener("input", () => {
+    showGhost = showGhostInput.checked;
+});
+
+const showGridLinesInput = document.getElementById("show-grid-lines") as HTMLInputElement;
+showGridLinesInput.addEventListener("input", () => {
+    showGridLines = showGridLinesInput.checked;
+});
+
+const showGridNumbersInput = document.getElementById("show-grid-numbers") as HTMLInputElement;
+showGridNumbersInput.addEventListener("input", () => {
+    showGridNumbers = showGridNumbersInput.checked;
+});
+
+const showFinesseHintInput = document.getElementById("show-finesse-hint") as HTMLInputElement;
+showFinesseHintInput.addEventListener("input", () => {
+    showFinesseHint = showFinesseHintInput.checked;
+});
 
 
 

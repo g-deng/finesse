@@ -1,4 +1,5 @@
 import { userSequence } from "./main";
+import { DAS, ARR } from "./settings";
 
 export type Action = "left" | "right" | "cw" | "ccw" | "180" | "softDrop" | "hardDrop";
 export type ExtendedAction = Action | "dasLeft" | "dasRight";
@@ -15,9 +16,6 @@ const keyMap : Record<string, Action> = {
 
 const unprocessedSequentials : Action[] = [];
 const heldActions : Set<Action> = new Set();
-
-const DAS = 150; // Delay Auto Shift in milliseconds
-const ARR = 0.01;  // Auto Repeat Rate in milliseconds
 
 let leftStart = -1; // timestamp of unconsumed left keydown
 let leftDAS = false; // true if DAS has been passed

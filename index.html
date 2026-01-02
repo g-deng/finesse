@@ -27,32 +27,36 @@
             <!-- Select targets checkboxes -->
             <label for="target-select">select targets: </label>
             <div id="target-select">
-                <input type="checkbox" id="target-I" checked />
-                <label for="target-I">I</label>
-                <input type="checkbox" id="target-O" checked />
-                <label for="target-O">O</label>
-                <input type="checkbox" id="target-T" checked />
-                <label for="target-T">T</label>
-                <input type="checkbox" id="target-S" checked />
-                <label for="target-S">S</label>
-                <input type="checkbox" id="target-Z" checked />
-                <label for="target-Z">Z</label>
-                <input type="checkbox" id="target-J" checked />
-                <label for="target-J">J</label>
-                <input type="checkbox" id="target-L" checked />
-                <label for="target-L">L</label>
+              <input type="checkbox" id="target-I" checked />
+              <label for="target-I">I</label>
+              <input type="checkbox" id="target-O" checked />
+              <label for="target-O">O</label>
+              <input type="checkbox" id="target-T" checked />
+              <label for="target-T">T</label>
+              <input type="checkbox" id="target-S" checked />
+              <label for="target-S">S</label>
+              <input type="checkbox" id="target-Z" checked />
+              <label for="target-Z">Z</label>
+              <input type="checkbox" id="target-J" checked />
+              <label for="target-J">J</label>
+              <input type="checkbox" id="target-L" checked />
+              <label for="target-L">L</label>
             </div>
           </div>
-          <!-- <div id="config-container">
+          <div id="config-container">
             <h3>config</h3>
+            <h4>handling</h4>
             <label for="das-input">DAS (ms): </label>
-            <input class="text-input" type="range" id="das-input" value="170" min="0" max="333" step="1" oninput="this.nextElementSibling.value = this.value"/>
+            <input class="text-input" type="range" id="das-input" value="170" min="0" max="333" step="1"
+              oninput="this.nextElementSibling.value = this.value" />
             <output>170</output>
             <br />
             <label for="arr-input">ARR (ms): </label>
-            <input class="text-input" type="range" id="arr-input" value="30" min="0" step="1" oninput="this.nextElementSibling.value = this.value"/>
+            <input class="text-input" type="range" id="arr-input" value="30" min="0" step="1"
+              oninput="this.nextElementSibling.value = this.value" />
             <output>30</output>
             <br />
+            <h4>graphics</h4>
             <label for="show-ghost">show ghost piece </label>
             <input type="checkbox" id="show-ghost" checked />
             <br />
@@ -60,36 +64,37 @@
             <input type="checkbox" id="show-grid-lines" checked />
             <br />
             <label for="show-grid-numbers">show grid numbers </label>
-            <input type="checkbox" id="show-grid-numbers" />
+            <input type="checkbox" id="show-grid-numbers" checked />
             <br />
             <label for="show-finesse-hint">show finesse hint </label>
             <input type="checkbox" id="show-finesse-hint" checked />
             <br />
-          </div> -->
-          <!-- Keybinds -->
-          <!-- <div id="keybinds-container">
-            <h3>keybinds</h3>
-            <div id="keybinds-list">
-              <label for="keybind-left">move left: </label>
-              <input class="text-input" type="text" id="keybind-left" value="ArrowLeft" />
-              <br />
-              <label for="keybind-right">move right: </label>
-              <input class="text-input" type="text" id="keybind-right" value="ArrowRight" />
-              <br />
-              <label for="keybind-cw">rotate cw: </label>
-              <input class="text-input" type="text" id="keybind-cw" value="ArrowUp" />
-              <br />
-              <label for="keybind-ccw">rotate ccw: </label>
-              <input class="text-input" type="text" id="keybind-ccw" value="KeyZ" />
-              <br />
-              <label for="keybind-180">rotate 180: </label>
-              <input class="text-input" type="text" id="keybind-180" value="KeyX" />
-              <br />
-              <label for="keybind-hard-drop">hard drop: </label>
-              <input class="text-input" type="text" id="keybind-hard-drop" value="Space" />
-              <br />
-            </div>
-          </div> -->
+
+            <!-- Keybinds -->
+            <!-- <div id="keybinds-container">
+              <h4>keybinds</h4>
+                <div id="keybinds-list">
+                  <label for="keybind-left">move left: </label>
+                  <input class="text-input" type="text" id="keybind-left" value="ArrowLeft" />
+                  <br />
+                  <label for="keybind-right">move right: </label>
+                  <input class="text-input" type="text" id="keybind-right" value="ArrowRight" />
+                  <br />
+                  <label for="keybind-cw">rotate cw: </label>
+                  <input class="text-input" type="text" id="keybind-cw" value="ArrowUp" />
+                  <br />
+                  <label for="keybind-ccw">rotate ccw: </label>
+                  <input class="text-input" type="text" id="keybind-ccw" value="KeyZ" />
+                  <br />
+                  <label for="keybind-180">rotate 180: </label>
+                  <input class="text-input" type="text" id="keybind-180" value="KeyX" />
+                  <br />
+                  <label for="keybind-hard-drop">hard drop: </label>
+                  <input class="text-input" type="text" id="keybind-hard-drop" value="Space" />
+                  <br />
+                </div>
+            </div> -->
+          </div>
           <br />
         </details>
       </div>

@@ -13,6 +13,8 @@ let finesseSequence: ExtendedAction[] | null = null;
 let lastTime = 0;
 let accumulator = 0;
 export const userSequence: ExtendedAction[] = [];
+let currentStreak = 0;
+let bestStreak = 0;
 
 function processAction(block: Block, action: Action) {
   switch (action) {
@@ -54,14 +56,19 @@ function update(delta: number) {
     const drop = Math.floor(accumulator / dropInterval);
     accumulator = 0;
     if (currentBlock.getY() - drop < 1) {
-      // landed
+      // drop
       // check if finesse was achieved
       if (blockAtTarget(currentBlock, currentTarget!) && userSequence.length === finesseSequence!.length + 1) {
         currentBlock = null;
         currentTarget = null;
         finesseSequence = null;
+        currentStreak += 1;
+        if (currentStreak > bestStreak) {
+          bestStreak = currentStreak;
+        }
       } else {
         currentBlock = getSpawnBlock(currentTarget!.shape);
+        currentStreak = 0;
       }
       userSequence.length = 0;
     } else {
@@ -112,6 +119,9 @@ function render() {
   } else {
     userSequenceElem.textContent = `your sequence: none`;
   }
+
+  const streakElem = document.getElementById("streak")!;
+  streakElem.textContent = `current streak: ${currentStreak} | best streak: ${bestStreak}`;
 
 
   drawGrid();

@@ -62,7 +62,7 @@ class OBlock extends Block {
   constructor() {
     super(5, 19, "O");
   }
-  draw(x: number, y: number, direction: Direction) {
+  draw(x: number, y: number) {
     fillRect(x, y, 2, 2);
   }
   moveLeft() {

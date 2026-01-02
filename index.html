@@ -10,11 +10,17 @@
     <div id="app">
         <h1>finesse</h1>
         <p id="block-text"></p>
-        <p id="finesse-hint"></p>
-        <p id="user-sequence"></p>
-        <p id="streak"></p>
-        <canvas id="game" width="300" height="600"></canvas>
+        <div class="game-layout">
+          <canvas id="game" width="300" height="600"></canvas>
+          <div class="side-panel">
+            <p id="finesse-hint"></p>
+            <p id="user-sequence"></p>
+            <p id="streak"></p>
+            <p id="best-streak"></p>
+          </div>
+        </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </body>
 </html>

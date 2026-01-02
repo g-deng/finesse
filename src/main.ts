@@ -5,6 +5,25 @@ import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
 import { getNewTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
+import { createIcons, icons } from "lucide";
+
+const actionIcon: Record<ExtendedAction, string> = {
+  left: "arrow-left",
+  right: "arrow-right",
+  softDrop: "arrow-down",
+  hardDrop: "arrow-down-to-line",
+  cw: "rotate-cw",
+  ccw: "rotate-ccw",
+  "180": "circle",
+  dasLeft: "chevrons-left",
+  dasRight: "chevrons-right",
+};
+
+const toIconHtml = (actions: ExtendedAction[]) =>
+  actions
+    .map((a) => `<i data-lucide="${actionIcon[a]}" class="action-icon" aria-label="${a}"></i>`)
+    .join(" ");
+
 
 const dropInterval = 300;
 let currentBlock: Block | null = null;
@@ -86,6 +105,17 @@ function update(delta: number) {
   }
 }
 
+let lastUserMarkup = "";
+let lastHintMarkup = "";
+
+function setIcons(elem: HTMLElement, label: string, markup: string, last: { v: string }) {
+  if (markup === last.v) return;
+  last.v = markup;
+  elem.innerHTML = label + (markup || "none");
+  createIcons({ icons, nameAttr: "data-lucide" });
+}
+
+
 function render() {
   const blockTextElem = document.getElementById("block-text")!;
   if (currentTarget) {
@@ -101,27 +131,25 @@ function render() {
   } else {
     blockTextElem.textContent = "target: none";
   }
+const hintMarkup = currentBlock && currentTarget
+    ? toIconHtml([...(finesseSequence ?? []), "hardDrop"])
+    : "";
+  setIcons(document.getElementById("finesse-hint")!, "finesse hint: ", hintMarkup, { v: lastHintMarkup });
 
-  const finesseHintElem = document.getElementById("finesse-hint")!;
-  if (currentBlock && currentTarget) {
-    if (finesseSequence) {
-      finesseHintElem.textContent = `finesse hint: ${finesseSequence.join(", ")}, hardDrop`;
-    } else {
-      finesseHintElem.textContent = `finesse hint: hardDrop`;
-    }
-  } else {
-    finesseHintElem.textContent = `finesse hint: none`;
-  }
- 
-  const userSequenceElem = document.getElementById("user-sequence")!;
-  if (userSequence.length > 0) {
-    userSequenceElem.textContent = `your sequence: ${userSequence.join(", ")}`;
-  } else {
-    userSequenceElem.textContent = `your sequence: none`;
-  }
+  const userMarkup =
+    userSequence.length > 5
+      ? `${toIconHtml(userSequence.slice(0, 2))}<span class="action-ellipsis"> … </span>${toIconHtml(userSequence.slice(-3))}`
+      : userSequence.length > 0
+        ? toIconHtml(userSequence)
+        : "";
+  setIcons(document.getElementById("user-sequence")!, "your sequence: ", userMarkup, { v: lastUserMarkup });
+
 
   const streakElem = document.getElementById("streak")!;
-  streakElem.textContent = `current streak: ${currentStreak} | best streak: ${bestStreak}`;
+  streakElem.textContent = `current streak: ${currentStreak}`;
+
+  const bestStreakElem = document.getElementById("best-streak")!;
+  bestStreakElem.textContent = `best streak: ${bestStreak}`;
 
 
   drawGrid();

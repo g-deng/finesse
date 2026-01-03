@@ -189,8 +189,8 @@ h4 {
   margin-top: 2rem;
   padding: 1rem 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: light-dark( rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.6));
+  border-top: 1px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2));
   /* center text */
   text-align: center;
 }

@@ -161,9 +161,9 @@ function render() {
 
   if (isRedo) {
     blockTextElem.textContent += " (redo)";
-    blockTextElem.style.color = "lightpink";
+    blockTextElem.style.color = "light-dark(lightcoral, lightpink)";
   } else {
-    blockTextElem.style.color = "white";
+    blockTextElem.style.color = "inherit";
   }
 
   const targetProgressElem = document.getElementById("target-progress")!;

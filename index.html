@@ -11,9 +11,8 @@
 <body>
   <div id="app">
     <h1>finesse</h1>
-    <p id="block-text"></p>
     <div class="game-layout">
-      <div class="side-panel">
+      <div id="settings-panel" class="side-panel">
         <details open>
           <summary>
             <h2>settings</h2>
@@ -149,6 +148,13 @@
       </div>
       <canvas id="game" width="300" height="600"></canvas>
       <div class="side-panel">
+        <h2>play</h2>
+        <p id="block-text"></p>
+        <p id="target-progress"></p>
+        <button id="start-button">start</button>
+        <button id="pause-button">pause</button>
+        <button id="restart-button">restart</button>
+        <h2>stats</h2>
         <p id="finesse-hint"></p>
         <p id="user-sequence"></p>
         <p id="streak"></p>

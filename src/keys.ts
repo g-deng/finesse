@@ -5,15 +5,15 @@ import { keyMap } from "./settings";
 export type Action = "left" | "right" | "cw" | "ccw" | "180" | "harddrop";
 export type ExtendedAction = Action | "dasLeft" | "dasRight";
 
-const unprocessedSequentials : Action[] = [];
-const heldActions : Set<Action> = new Set();
+const unprocessedSequentials: Action[] = [];
+const heldActions: Set<Action> = new Set();
 
 let leftStart = -1; // timestamp of unconsumed left keydown
 let leftDAS = false; // true if DAS has been passed
 let rightStart = -1; // timestamp of unconsumed right keydown
 let rightDAS = false; // true if DAS has been passed
 
-document.addEventListener("keydown", (e) => {
+const keydownListener = (e: KeyboardEvent) => {
   const action = keyMap[e.code];
   if (action === undefined) return;
   if (heldActions.has(action)) return; // already processed keydown
@@ -31,9 +31,9 @@ document.addEventListener("keydown", (e) => {
   unprocessedSequentials.push(action);
   // console.log("Keydown:", e.code, "mapped to action:", action);
   e.preventDefault();
-});
+};
 
-document.addEventListener("keyup", (e) => {
+const keyupListener = (e: KeyboardEvent) => {
   const action = keyMap[e.code];
   if (action === undefined) return;
   heldActions.delete(action);
@@ -44,7 +44,17 @@ document.addEventListener("keyup", (e) => {
     rightStart = -1;
     rightDAS = false;
   }
-});
+};
+
+export function setupKeyListeners() {
+  document.addEventListener("keydown", keydownListener);
+  document.addEventListener("keyup", keyupListener);
+}
+
+export function removeKeyListeners() {
+  document.removeEventListener("keydown", keydownListener);
+  document.removeEventListener("keyup", keyupListener);
+}
 
 export function consumeSequentials(): Action[] {
   const actions = [...unprocessedSequentials];
@@ -79,7 +89,7 @@ export function consumeContinuous(): { action: Action, count: number } {
       leftStart += DAS + count * ARR;
       popMostRecentAction("left");
       userSequence.push("dasLeft");
-    } 
+    }
   } else if (rightStart !== -1) {
     action = "right";
     if (rightDAS) {

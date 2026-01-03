@@ -48,3 +48,17 @@ export function drawGrid() {
     ctx.stroke();
   }
 }
+
+// Shades over the game screen and shows "paused"
+export function drawPauseScreen() {
+  const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
+  const ctx = canvas.getContext("2d")!;
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "20px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("PAUSED", canvas.width / 2, canvas.height / 2);
+}

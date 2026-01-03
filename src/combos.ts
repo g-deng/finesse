@@ -172,6 +172,10 @@ const activeTargets : FinesseTarget[] = targets.slice();
 
 var x = -1;
 
+function resetTargetIndex(): void {
+  x = -1;
+}
+
 function filterActiveTargets(shapes: Shape[]): void {
   activeTargets.length = 0;
   for (const target of targets) {
@@ -188,9 +192,13 @@ function getNextTarget(): FinesseTarget | null {
   return activeTargets[x];
 }
 
+function getTargetProgress(): string {
+  return `${x + 1} / ${activeTargets.length}`;
+}
+
 function getRandomTarget(): FinesseTarget | null {
   const randomIndex = Math.floor(Math.random() * activeTargets.length);
   return activeTargets[randomIndex];
 }
 
-export { targets, isVHBlock, isNESWBlock, filterActiveTargets, getNextTarget, getRandomTarget, getSpawnBlock, blockAtTarget };
+export { targets, isVHBlock, isNESWBlock, filterActiveTargets, getNextTarget, getRandomTarget, getSpawnBlock, blockAtTarget, resetTargetIndex, getTargetProgress };

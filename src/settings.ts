@@ -1,6 +1,12 @@
 import { type Shape } from "./types.js";
 import { filterActiveTargets } from "./combos.js";
 import type { Action } from "./keys.js";
+import { pauseGame } from "./main.js";
+
+const settingsPanel = document.getElementById("settings-panel") as HTMLDivElement;
+settingsPanel.addEventListener("click", () => {
+    pauseGame();
+});
 
 /* Setup */
 

@@ -14,18 +14,18 @@ randomizeElement.addEventListener("input", () => {
 
 const targetSelectElement = document.getElementById("target-select") as HTMLDivElement;
 
-export const selectedShapes: Shape[] = [];
+export const selectedShapes: Shape[] = ["I", "O", "T", "S", "Z", "J", "L"];
 const shapes: Shape[] = ["I", "O", "T", "S", "Z", "J", "L"];
 function getSelectedShapes(): Shape[] {
-    const selectedShapes: Shape[] = [];
+    const newShapes: Shape[] = [];
     const checkboxes = targetSelectElement.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
     for (let i = 0; i < checkboxes.length; i++) {
         const checkbox = checkboxes[i];
         if (checkbox.checked) {
-            selectedShapes.push(shapes[i]);
+            newShapes.push(shapes[i]);
         }
     }
-    return selectedShapes;
+    return newShapes;
 }
 
 targetSelectElement.addEventListener("click", () => {
@@ -181,4 +181,86 @@ resetKeybindGraceButton.addEventListener("click", () => {
     keyMap[keybinds.cw] = "cw";
     keyMap[keybinds.ccw] = "ccw";
     keyMap[keybinds["180"]] = "180";
+});
+
+
+/* Export / Import Config */
+
+const exportButton = document.getElementById("export-button") as HTMLButtonElement;
+exportButton.addEventListener("click", () => {
+    const config = {
+        DAS,
+        ARR,
+        keybinds,
+        showGhost,
+        showGridLines,
+        showGridNumbers,
+        showFinesseHint,
+        selectedShapes,
+        randomizeMode,
+    };
+    const configString = JSON.stringify(config, null, 2);
+    const blob = new Blob([configString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "finesse-config.json";
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+const importButton = document.getElementById("import-button") as HTMLButtonElement;
+const importFileInput = document.getElementById("import-file-input") as HTMLInputElement;
+importButton.addEventListener("click", () => {
+    importFileInput.click();
+});
+
+importFileInput.addEventListener("change", () => {
+    const file = importFileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        try {
+            const config = JSON.parse(reader.result as string);
+            console.log(config);
+            // apply config
+            DAS = config.DAS;
+            ARR = config.ARR;
+            Object.assign(keybinds, config.keybinds);
+            showGhost = config.showGhost;
+            showGridLines = config.showGridLines;
+            showGridNumbers = config.showGridNumbers;
+            showFinesseHint = config.showFinesseHint;
+            selectedShapes.length = 0;
+            selectedShapes.push(...config.selectedShapes);
+            randomizeMode = config.randomizeMode;
+
+            // update UI elements
+            dasInput.value = DAS.toString();
+            arrInput.value = ARR.toString();
+            dasInput.nextElementSibling!.textContent = DAS.toString();
+            arrInput.nextElementSibling!.textContent = Math.floor(ARR).toString();
+            showGhostInput.checked = showGhost;
+            showGridLinesInput.checked = showGridLines;
+            showGridNumbersInput.checked = showGridNumbers;
+            showFinesseHintInput.checked = showFinesseHint;
+            const checkboxes = targetSelectElement.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.checked = selectedShapes.includes(shapes[index]);
+            });
+            randomizeElement.checked = randomizeMode;
+
+            // update keybind outputs
+            keybindButtons.forEach((button) => {
+                const action = button.id.replace("keybind-", "");
+                const output = button.previousElementSibling as HTMLOutputElement;
+                output.value = keybinds[action];
+            });
+
+            console.log("Config imported successfully");
+        } catch (e) {
+            console.error("Failed to import config:", e);
+        }
+    };
+    reader.readAsText(file);
 });

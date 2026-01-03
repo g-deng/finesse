@@ -1,6 +1,10 @@
 # finessy
 > [!NOTE]
 > **finessy** is still in progress right now!!
+
+[play finessy](https://g-deng.github.io/finessy/)
+[give feedback](https://forms.gle/XGFCdntftmruCLpq5)
+
 ## what is finesse?
 finesse is a concept used in tetris to optimize the number of keypresses used to place a piece in any given position. 
 

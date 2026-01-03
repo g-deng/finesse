@@ -15,8 +15,7 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  
   min-width: 320px;
   min-height: 100vh;
 }
@@ -30,27 +29,42 @@ h1 {
 h2 {
   font-size: 1.5em;
   line-height: 1.2;
-  margin: 0;
-  margin-top: 0.5rem;
 }
 
 .game-layout {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  align-items: stretch;
   justify-content: center;
   gap: 1.5rem;
-  flex-wrap: wrap;
   margin-top: 1rem;
 }
 
+.panel {
+  border: 1px solid gray;
+  border-radius: 0.2rem;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  width: 320px;
+  /* flex: 1 1 320px; */
+  display: flex;
+  flex-direction: column;
+}
+
 .side-panel {
-  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.3rem;
   text-align: left;
   user-select: none;
+}
+
+.game-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
 }
 
 .action-icon {
@@ -152,16 +166,32 @@ h4 {
   margin: 0.5rem 0 0.2rem 0;
 }
 
-details {
-  border: 1px solid gray;
-  border-radius: 0.2rem;
-  padding: 0.5rem;
-}
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  text-align: center;
+}
+
+#play-controls button {
+  margin-top: 0.5rem;
+}
+
+#play-controls p {
+  margin: 0.2rem 0;
+}
+
+#stats-panel p {
+  margin: 0.2rem 0;
+}
+
+.site-footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* center text */
   text-align: center;
 }
 

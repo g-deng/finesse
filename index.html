@@ -12,7 +12,7 @@
   <div id="app">
     <h1>finessy</h1>
     <div class="game-layout">
-      <div id="settings-panel" class="side-panel">
+      <div id="settings-panel" class="side-panel panel">
         <details open>
           <summary>
             <h2>settings</h2>
@@ -146,19 +146,37 @@
           <br />
         </details>
       </div>
-      <canvas id="game" width="300" height="600"></canvas>
-      <div class="side-panel">
+      <div class="game-panel panel">
+        <canvas id="game" width="300" height="600"></canvas>
+      </div>
+      <div id="info-panel" class="side-panel panel">
+        <div id="info-panel-content">
+        <div id="instructions">
+          <h2>instructions</h2>
+          <p>finessy is a training tool (in-progress!!) for improving your tetromino handling skills!! more on <a
+              href="https://github.com/g-deng/finessy" target="_blank">github</a>. give feedback <a href="https://forms.gle/XGFCdntftmruCLpq5" target="_blank">here</a>!</p>
+        </div>
         <h2>play</h2>
-        <p id="block-text"></p>
-        <p id="target-progress"></p>
-        <button id="start-button">start</button>
-        <button id="pause-button">pause</button>
-        <button id="restart-button">restart</button>
+        <div id="play-controls">
+          <p id="block-text"></p>
+          <p id="target-progress"></p>
+          <button id="start-button">start</button>
+          <button id="pause-button">pause</button>
+          <button id="restart-button">restart</button>
+        </div>
         <h2>stats</h2>
-        <p id="finesse-hint"></p>
-        <p id="user-sequence"></p>
-        <p id="streak"></p>
-        <p id="best-streak"></p>
+        <div id="stats-panel">
+          <p id="finesse-hint"></p>
+          <p id="user-sequence"></p>
+          <p id="streak"></p>
+          <p id="best-streak"></p>
+        </div>
+        </div>
+        <footer class="site-footer">
+          <p style="margin: 0;">built by grace deng, hosted on github pages. find the code <a
+              href="https://github.com/g-deng/finessy" target="_blank">here</a></p>
+          <p style="margin: 0;">&copy; 2026 grace deng. all rights reserved. </p>
+        </footer>
       </div>
     </div>
   </div>

@@ -6,7 +6,7 @@ import { Block } from "./graphics/blocks.ts";
 import { getNextTarget, getRandomTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget, type FinesseTarget } from "./combos.ts";
 import { drawTarget } from "./graphics/targets.ts";
 import { createIcons, icons } from "lucide";
-import { randomizeMode, showFinesseHint, showGhost } from "./settings.ts";
+import { randomizeMode, showFinesseHint, showGhost, dropInterval } from "./settings.ts";
 
 const actionIcon: Record<ExtendedAction, string> = {
   left: "arrow-left",
@@ -25,7 +25,6 @@ const toIconHtml = (actions: ExtendedAction[]) =>
     .join(" ");
 
 
-const dropInterval = 300;
 let currentBlock: Block | null = null;
 let currentTarget: Target | null = null;
 let finesseSequence: ExtendedAction[] | null = null;
@@ -74,10 +73,29 @@ function update(delta: number) {
 
   accumulator += delta;
 
-  if (accumulator > dropInterval) {
+  if (dropInterval > 1000) {
+    // no drop
+    if (currentBlock.getY() <= 1) {
+      // drop
+      // check if finesse was achieved
+      if (blockAtTarget(currentBlock, currentTarget!) && userSequence.length === finesseSequence!.length + 1) {
+        currentBlock = null;
+        currentTarget = null;
+        finesseSequence = null;
+        currentStreak += 1;
+        if (currentStreak > bestStreak) {
+          bestStreak = currentStreak;
+        }
+      } else {
+        currentBlock = getSpawnBlock(currentTarget!.shape);
+        currentStreak = 0;
+      }
+      userSequence.length = 0;
+    }
+  } else if (accumulator > dropInterval) {
     const drop = Math.floor(accumulator / dropInterval);
     accumulator = 0;
-    if (currentBlock.getY() - drop < 1) {
+    if (currentBlock.getY() - drop <= 1) {
       // drop
       // check if finesse was achieved
       if (blockAtTarget(currentBlock, currentTarget!) && userSequence.length === finesseSequence!.length + 1) {

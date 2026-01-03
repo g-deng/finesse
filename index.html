@@ -24,7 +24,7 @@
             <input type="file" id="import-file-input" style="display: none;" />
           </div>
           <div id="setup-container">
-            <h3>setup</h3>
+            <h4>setup</h4>
             <!-- Randomize -->
             <label for="randomize-toggle">randomize </label>
             <input type="checkbox" id="randomize-toggle" />
@@ -48,88 +48,99 @@
               <label for="target-L">L</label>
             </div>
           </div>
-          <div id="config-container">
-            <h3>config</h3>
-            <div class="settings-header">
-              <h4>handlings</h4>
-              <button id="reset-handling-default-button">reset to default</button>
-              <button id="reset-handling-grace-button">reset to grace's</button>
-            </div>
+          <div class="settings-header">
+            <h4>handling</h4>
+            <button id="reset-handling-default-button">reset to default</button>
+            <button id="reset-handling-grace-button">reset to grace's</button>
+          </div>
+          <div class="range-input-group">
             <label for="das-input">DAS (ms): </label>
-            <input class="text-input" type="range" id="das-input" value="170" min="0" max="333" step="1"
-              oninput="this.nextElementSibling.value = this.value" />
-            <output>170</output>
-            <br />
+            <div style="display: flex; justify-content: space-between;">
+              <input class="text-input" type="range" id="das-input" value="170" min="0" max="333" step="1"
+                oninput="this.nextElementSibling.value = this.value" />
+              <output>170</output>
+            </div>
+          </div>
+          <div class="range-input-group">
             <label for="arr-input">ARR (ms): </label>
-            <input class="text-input" type="range" id="arr-input" value="30" min="0" step="1"
-              oninput="this.nextElementSibling.value = this.value" />
-            <output>30</output>
-            <br />
-            <h4>graphics</h4>
-            <label for="show-ghost">show ghost piece </label>
-            <input type="checkbox" id="show-ghost" checked />
-            <br />
-            <label for="show-grid-lines">show grid lines </label>
-            <input type="checkbox" id="show-grid-lines" checked />
-            <br />
-            <label for="show-grid-numbers">show grid numbers </label>
-            <input type="checkbox" id="show-grid-numbers" checked />
-            <br />
-            <label for="show-finesse-hint">show finesse hint </label>
-            <input type="checkbox" id="show-finesse-hint" checked />
-            <br />
+            <div style="display: flex; justify-content: space-between;">
+              <input class="text-input" type="range" id="arr-input" value="30" min="0" max="83" step="1"
+                oninput="this.nextElementSibling.value = this.value" />
+              <output>30</output>
+            </div>
+          </div>
+          <div class="range-input-group">
+            <label for="drop-speed">dropspeed: </label>
+            <div style="display: flex; justify-content: space-between;">
+              <input type="range" id="drop-speed" value="3" min="0" max="20" step="1"
+                oninput="this.nextElementSibling.value = this.value" />
+              <output>3</output>
+            </div>
+          </div>
+          <h4>graphics</h4>
+          <label for="show-ghost">show ghost piece </label>
+          <input type="checkbox" id="show-ghost" checked />
+          <br />
+          <label for="show-grid-lines">show grid lines </label>
+          <input type="checkbox" id="show-grid-lines" checked />
+          <br />
+          <label for="show-grid-numbers">show grid numbers </label>
+          <input type="checkbox" id="show-grid-numbers" checked />
+          <br />
+          <label for="show-finesse-hint">show finesse hint </label>
+          <input type="checkbox" id="show-finesse-hint" checked />
+          <br />
 
-            <!-- Keybinds -->
-            <div id="keybinds-container">
-              <div class="settings-header">
-                <h4>keybinds</h4>
-                <button id="reset-keybind-default-button">reset to default</button>
-                <button id="reset-keybind-grace-button">reset to grace's</button>
+          <!-- Keybinds -->
+          <div id="keybinds-container">
+            <div class="settings-header">
+              <h4>keybinds</h4>
+              <button id="reset-keybind-default-button">reset to default</button>
+              <button id="reset-keybind-grace-button">reset to grace's</button>
+            </div>
+            <div id="keybinds-list">
+              <div class="keybind-group">
+                <label for="keybind-left"><i class="keybind-icon" data-lucide="arrow-left"></i>move left: </label>
+                <output id="keybind-left-output">ArrowLeft</output>
+                <button class="keybind-button" type="text" id="keybind-left">
+                  <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                </button>
               </div>
-              <div id="keybinds-list">
-                <div class="keybind-group">
-                  <label for="keybind-left"><i class="keybind-icon" data-lucide="arrow-left"></i>move left: </label>
-                  <output id="keybind-left-output">ArrowLeft</output>
-                  <button class="keybind-button" type="text" id="keybind-left">
-                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
-                  </button>
-                </div>
-                <div class="keybind-group">
-                  <label for="keybind-right"><i class="keybind-icon" data-lucide="arrow-right"></i>move right: </label>
-                  <output id="keybind-right-output">ArrowRight</output>
-                  <button class="keybind-button" type="text" id="keybind-right">
-                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
-                  </button>
-                </div>
-                <div class="keybind-group">
-                  <label for="keybind-cw"><i class="keybind-icon" data-lucide="rotate-cw"></i>rotate cw: </label>
-                  <output id="keybind-cw-output">KeyZ</output>
-                  <button class="keybind-button" type="text" id="keybind-cw">
-                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
-                  </button>
-                </div>
-                <div class="keybind-group">
-                  <label for="keybind-ccw"><i class="keybind-icon" data-lucide="rotate-ccw"></i>rotate ccw: </label>
-                  <output id="keybind-ccw-output">ArrowUp</output>
-                  <button class="keybind-button" type="text" id="keybind-ccw">
-                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
-                  </button>
-                </div>
-                <div class="keybind-group">
-                  <label for="keybind-180"><i class="keybind-icon" data-lucide="circle"></i>rotate 180: </label>
-                  <output id="keybind-180-output">KeyA</output>
-                  <button class="keybind-button" type="text" id="keybind-180">
-                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
-                  </button>
-                </div>
-                <div class="keybind-group">
-                  <label for="keybind-harddrop"><i class="keybind-icon" data-lucide="arrow-down-to-line"></i>hard drop:
-                  </label>
-                  <output id="keybind-harddrop-output">Space</output>
-                  <button class="keybind-button" type="text" id="keybind-harddrop">
-                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
-                  </button>
-                </div>
+              <div class="keybind-group">
+                <label for="keybind-right"><i class="keybind-icon" data-lucide="arrow-right"></i>move right: </label>
+                <output id="keybind-right-output">ArrowRight</output>
+                <button class="keybind-button" type="text" id="keybind-right">
+                  <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                </button>
+              </div>
+              <div class="keybind-group">
+                <label for="keybind-cw"><i class="keybind-icon" data-lucide="rotate-cw"></i>rotate cw: </label>
+                <output id="keybind-cw-output">KeyZ</output>
+                <button class="keybind-button" type="text" id="keybind-cw">
+                  <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                </button>
+              </div>
+              <div class="keybind-group">
+                <label for="keybind-ccw"><i class="keybind-icon" data-lucide="rotate-ccw"></i>rotate ccw: </label>
+                <output id="keybind-ccw-output">ArrowUp</output>
+                <button class="keybind-button" type="text" id="keybind-ccw">
+                  <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                </button>
+              </div>
+              <div class="keybind-group">
+                <label for="keybind-180"><i class="keybind-icon" data-lucide="circle"></i>rotate 180: </label>
+                <output id="keybind-180-output">KeyA</output>
+                <button class="keybind-button" type="text" id="keybind-180">
+                  <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                </button>
+              </div>
+              <div class="keybind-group">
+                <label for="keybind-harddrop"><i class="keybind-icon" data-lucide="arrow-down-to-line"></i>hard drop:
+                </label>
+                <output id="keybind-harddrop-output">Space</output>
+                <button class="keybind-button" type="text" id="keybind-harddrop">
+                  <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                </button>
               </div>
             </div>
           </div>

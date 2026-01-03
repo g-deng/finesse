@@ -38,6 +38,8 @@ targetSelectElement.addEventListener("click", () => {
 
 export let DAS = 170;
 export let ARR = 30;
+let dropSpeed = 3;
+export let dropInterval = 1000 / 3;
 
 const dasInput = document.getElementById("das-input") as HTMLInputElement;
 dasInput.addEventListener("input", () => {
@@ -52,25 +54,39 @@ arrInput.addEventListener("input", () => {
     }
 });
 
+const dropSpeedInput = document.getElementById("drop-speed") as HTMLInputElement;
+dropSpeedInput.addEventListener("input", () => {
+    dropSpeed = parseFloat(dropSpeedInput.value);
+    if (dropSpeed <= 0) {
+        dropInterval = Infinity;
+    } else {
+        dropInterval = 1000 / dropSpeed;
+    }
+});
+
 const resetHandlingDefaultButton = document.getElementById("reset-handling-default-button") as HTMLButtonElement;
 resetHandlingDefaultButton.addEventListener("click", () => {
-    console.log("Resetting handling settings to default");
     dasInput.value = "170";
     (dasInput.nextElementSibling as HTMLOutputElement).value = "170";
     DAS = 170;
     arrInput.value = "30";
     (arrInput.nextElementSibling as HTMLOutputElement).value = "30";
     ARR = 30;
+    dropSpeedInput.value = "3";
+    (dropSpeedInput.nextElementSibling as HTMLOutputElement).value = "3";
+    dropInterval = 1000 / 3;
 });
 const resetHandlingGraceButton = document.getElementById("reset-handling-grace-button") as HTMLButtonElement;
 resetHandlingGraceButton.addEventListener("click", () => {
-    console.log("Resetting handling settings to grace's");
     dasInput.value = "100";
     (dasInput.nextElementSibling as HTMLOutputElement).value = "100";
     DAS = 100;
     arrInput.value = "0";
     (arrInput.nextElementSibling as HTMLOutputElement).value = "0";
     ARR = 0.001;
+    dropSpeedInput.value = "3";
+    (dropSpeedInput.nextElementSibling as HTMLOutputElement).value = "3";
+    dropInterval = 1000 / 3;
 });
 
 export let showGhost = true;
@@ -123,16 +139,12 @@ export const keyMap : Record<string, Action> = {
 const keybindButtons = document.querySelectorAll(".keybind-button") as NodeListOf<HTMLButtonElement>;
 
 keybindButtons.forEach((button) => {
-    console.log("Setting up keybind button:", button.id);
     button.addEventListener("click", () => {
-        console.log("Clicked keybind button:", button.id);
         const action = button.id.replace("keybind-", "");
-        console.log("Setting keybind for action:", action);
         const output = button.previousElementSibling as HTMLOutputElement;
         output.value = "Press a key...";
         const onKeydown = (e: KeyboardEvent) => {
             e.preventDefault();
-            console.log("Key pressed for action", action, ":", e.code);
             keybinds[action] = e.code;
             output.value = e.code;
             document.removeEventListener("keydown", onKeydown);
@@ -143,7 +155,6 @@ keybindButtons.forEach((button) => {
 
 const resetKeybindDefaultButton = document.getElementById("reset-keybind-default-button") as HTMLButtonElement;
 resetKeybindDefaultButton.addEventListener("click", () => {
-    console.log("Resetting keybinds to default");
     keybinds.left = "ArrowLeft";
     keybinds.right = "ArrowRight";
     keybinds.cw = "ArrowUp";
@@ -160,7 +171,6 @@ resetKeybindDefaultButton.addEventListener("click", () => {
 
 const resetKeybindGraceButton = document.getElementById("reset-keybind-grace-button") as HTMLButtonElement;
 resetKeybindGraceButton.addEventListener("click", () => {
-    console.log("Resetting keybinds to grace's");
     keybinds.left = "ArrowLeft";
     keybinds.right = "ArrowRight";
     keybinds.cw = "KeyD";
@@ -191,6 +201,7 @@ exportButton.addEventListener("click", () => {
     const config = {
         DAS,
         ARR,
+        dropSpeed,
         keybinds,
         showGhost,
         showGridLines,
@@ -222,10 +233,27 @@ importFileInput.addEventListener("change", () => {
     reader.onload = () => {
         try {
             const config = JSON.parse(reader.result as string);
-            console.log(config);
+
+            if (!config.DAS || config.DAS < 0 || config.DAS > 333) throw new Error("Invalid DAS value");
+            if (!config.ARR || config.ARR < 0 || config.ARR > 83) throw new Error("Invalid ARR value");
+            if (!config.dropSpeed || config.dropSpeed < 0 || config.dropSpeed > 20) throw new Error("Invalid dropSpeed value");
+            if (typeof config.keybinds !== "object") throw new Error("Invalid keybinds");
+            if (typeof config.showGhost !== "boolean") throw new Error("Invalid showGhost value");
+            if (typeof config.showGridLines !== "boolean") throw new Error("Invalid showGridLines value");
+            if (typeof config.showGridNumbers !== "boolean") throw new Error("Invalid showGridNumbers value");
+            if (typeof config.showFinesseHint !== "boolean") throw new Error("Invalid showFinesseHint value");
+            if (!Array.isArray(config.selectedShapes)) throw new Error("Invalid selectedShapes value");
+            if (typeof config.randomizeMode !== "boolean") throw new Error("Invalid randomizeMode value");
+
             // apply config
             DAS = config.DAS;
             ARR = config.ARR;
+            dropSpeed = config.dropSpeed;
+            if (dropSpeed <= 0) {
+                dropInterval = Infinity;
+            } else {
+                dropInterval = 1000 / dropSpeed;
+            }
             Object.assign(keybinds, config.keybinds);
             showGhost = config.showGhost;
             showGridLines = config.showGridLines;
@@ -233,6 +261,7 @@ importFileInput.addEventListener("change", () => {
             showFinesseHint = config.showFinesseHint;
             selectedShapes.length = 0;
             selectedShapes.push(...config.selectedShapes);
+            filterActiveTargets(selectedShapes);
             randomizeMode = config.randomizeMode;
 
             // update UI elements
@@ -240,6 +269,8 @@ importFileInput.addEventListener("change", () => {
             arrInput.value = ARR.toString();
             dasInput.nextElementSibling!.textContent = DAS.toString();
             arrInput.nextElementSibling!.textContent = Math.floor(ARR).toString();
+            dropSpeedInput.value = dropSpeed.toString();
+            dropSpeedInput.nextElementSibling!.textContent = dropSpeed.toString();
             showGhostInput.checked = showGhost;
             showGridLinesInput.checked = showGridLines;
             showGridNumbersInput.checked = showGridNumbers;

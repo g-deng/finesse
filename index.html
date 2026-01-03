@@ -45,7 +45,11 @@
           </div>
           <div id="config-container">
             <h3>config</h3>
-            <h4>handling</h4>
+            <div class="settings-header">
+              <h4>handlings</h4>
+              <button id="reset-handling-default-button">reset to default</button>
+              <button id="reset-handling-grace-button">reset to grace's</button>
+            </div>
             <label for="das-input">DAS (ms): </label>
             <input class="text-input" type="range" id="das-input" value="170" min="0" max="333" step="1"
               oninput="this.nextElementSibling.value = this.value" />
@@ -71,29 +75,58 @@
             <br />
 
             <!-- Keybinds -->
-            <!-- <div id="keybinds-container">
-              <h4>keybinds</h4>
-                <div id="keybinds-list">
-                  <label for="keybind-left">move left: </label>
-                  <input class="text-input" type="text" id="keybind-left" value="ArrowLeft" />
-                  <br />
-                  <label for="keybind-right">move right: </label>
-                  <input class="text-input" type="text" id="keybind-right" value="ArrowRight" />
-                  <br />
-                  <label for="keybind-cw">rotate cw: </label>
-                  <input class="text-input" type="text" id="keybind-cw" value="ArrowUp" />
-                  <br />
-                  <label for="keybind-ccw">rotate ccw: </label>
-                  <input class="text-input" type="text" id="keybind-ccw" value="KeyZ" />
-                  <br />
-                  <label for="keybind-180">rotate 180: </label>
-                  <input class="text-input" type="text" id="keybind-180" value="KeyX" />
-                  <br />
-                  <label for="keybind-hard-drop">hard drop: </label>
-                  <input class="text-input" type="text" id="keybind-hard-drop" value="Space" />
-                  <br />
+            <div id="keybinds-container">
+              <div class="settings-header">
+                <h4>keybinds</h4> 
+                <button id="reset-keybind-default-button">reset to default</button>
+                <button id="reset-keybind-grace-button">reset to grace's</button>
+              </div>
+              <div id="keybinds-list">
+                <div class="keybind-group">
+                  <label for="keybind-left"><i class="keybind-icon" data-lucide="arrow-left"></i>move left: </label>
+                  <output id="keybind-left-output">ArrowLeft</output>
+                  <button class="keybind-button" type="text" id="keybind-left">
+                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                  </button>
                 </div>
-            </div> -->
+                <div class="keybind-group">
+                  <label for="keybind-right"><i class="keybind-icon" data-lucide="arrow-right"></i>move right: </label>
+                  <output id="keybind-right-output">ArrowRight</output>
+                  <button class="keybind-button" type="text" id="keybind-right">
+                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                  </button>
+                </div>
+                <div class="keybind-group">
+                  <label for="keybind-cw"><i class="keybind-icon" data-lucide="rotate-cw"></i>rotate cw: </label>
+                  <output id="keybind-cw-output">KeyZ</output>
+                  <button class="keybind-button" type="text" id="keybind-cw">
+                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                  </button>
+                </div>
+                <div class="keybind-group">
+                  <label for="keybind-ccw"><i class="keybind-icon" data-lucide="rotate-ccw"></i>rotate ccw: </label>
+                  <output id="keybind-ccw-output">ArrowUp</output>
+                  <button class="keybind-button" type="text" id="keybind-ccw">
+                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                  </button>
+                </div>
+                <div class="keybind-group">
+                  <label for="keybind-180"><i class="keybind-icon" data-lucide="circle"></i>rotate 180: </label>
+                  <output id="keybind-180-output">KeyA</output>
+                  <button class="keybind-button" type="text" id="keybind-180">
+                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                  </button>
+                </div>
+                <div class="keybind-group">
+                  <label for="keybind-harddrop"><i class="keybind-icon" data-lucide="arrow-down-to-line"></i>hard drop:
+                  </label>
+                  <output id="keybind-harddrop-output">Space</output>
+                  <button class="keybind-button" type="text" id="keybind-harddrop">
+                    <i class="reset-keybind-icon" data-lucide="pencil"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <br />
         </details>

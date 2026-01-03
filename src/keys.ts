@@ -1,18 +1,9 @@
 import { userSequence } from "./main";
 import { DAS, ARR } from "./settings";
+import { keyMap } from "./settings";
 
-export type Action = "left" | "right" | "cw" | "ccw" | "180" | "softDrop" | "hardDrop";
+export type Action = "left" | "right" | "cw" | "ccw" | "180" | "harddrop";
 export type ExtendedAction = Action | "dasLeft" | "dasRight";
-
-const keyMap : Record<string, Action> = {
-  ArrowLeft: "left",
-  ArrowRight: "right",
-  ArrowDown: "softDrop",
-  Space: "hardDrop",
-  KeyA: "ccw",
-  KeyD: "cw",
-  KeyS: "180",
-};
 
 const unprocessedSequentials : Action[] = [];
 const heldActions : Set<Action> = new Set();

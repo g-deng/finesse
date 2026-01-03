@@ -11,8 +11,7 @@ import { randomizeMode, showFinesseHint, showGhost } from "./settings.ts";
 const actionIcon: Record<ExtendedAction, string> = {
   left: "arrow-left",
   right: "arrow-right",
-  softDrop: "arrow-down",
-  hardDrop: "arrow-down-to-line",
+  harddrop: "arrow-down-to-line",
   cw: "rotate-cw",
   ccw: "rotate-ccw",
   "180": "circle",
@@ -45,10 +44,7 @@ function processAction(block: Block, action: Action) {
     case "right":
       block.moveRight();
       break;
-    case "softDrop":
-      block.setY(1);
-      break;
-    case "hardDrop":
+    case "harddrop":
       block.setY(1);
       break;
     case "cw":
@@ -141,7 +137,7 @@ function render() {
 
   if (showFinesseHint) {
     const hintMarkup = currentBlock && currentTarget
-      ? toIconHtml([...(finesseSequence ?? []), "hardDrop"])
+      ? toIconHtml([...(finesseSequence ?? []), "harddrop"])
       : "";
     setIcons(document.getElementById("finesse-hint")!, "finesse hint: ", hintMarkup, { v: lastHintMarkup });
   } else {

@@ -79,6 +79,54 @@ h1 {
   margin-right: 0.2rem;
 }
 
+/* flex justify space between */
+.keybind-group {
+  margin-bottom: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.keybind-button {
+  all: unset;
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.4rem;
+  margin-right: 0.2rem;
+  display: inline-flex; 
+  align-items: center;
+  justify-content: center;
+}
+
+/* disable pointer events on the keybind button icons so that we can click through
+because lucide replaces i element with svg */
+.keybind-button svg {
+  pointer-events: none;
+}
+
+.keybind-button:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+}
+
+.keybind-icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  vertical-align: -0.1em;
+  margin-right: 0.3rem;
+  /* padding: 3px;
+  border: 1px solid gray;
+  border-radius: 50%; */
+}
+
+.reset-keybind-icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  vertical-align: -0.1em;
+}
+
 summary>h2 {
   display: inline;
 }

@@ -124,7 +124,7 @@ showFinesseHintInput.addEventListener("input", () => {
 
 // user clicks on keybind button, then presses a key to set keybind
 
-export const keybinds: { [action: string]: string } = {
+const keybinds: { [action: string]: string } = {
     left: "ArrowLeft",
     right: "ArrowRight",
     cw: "ArrowUp",
@@ -133,27 +133,46 @@ export const keybinds: { [action: string]: string } = {
     harddrop: "Space",
 };
 
-export const keyMap : Record<string, Action> = {
-    [keybinds.left]: "left",
-    [keybinds.right]: "right",
-    [keybinds.harddrop]: "harddrop",
-    [keybinds.cw]: "cw",
-    [keybinds.ccw]: "ccw",
-    [keybinds["180"]]: "180",
-};
+export const keyMap : Record<string, Action> = {};
+
+function updateKeyMap() {
+    // clear keyMap
+    for (const key in keyMap) {
+        delete keyMap[key];
+    }
+    // repopulate keyMap
+    for (const action in keybinds) {
+        const key = keybinds[action];
+        keyMap[key] = action as Action;
+    }
+}
+
+updateKeyMap();
+
 
 const keybindButtons = document.querySelectorAll(".keybind-button") as NodeListOf<HTMLButtonElement>;
+
 
 keybindButtons.forEach((button) => {
     button.addEventListener("click", () => {
         const action = button.id.replace("keybind-", "");
         const output = button.previousElementSibling as HTMLOutputElement;
-        output.value = "Press a key...";
+        output.value = "press a key...";
         const onKeydown = (e: KeyboardEvent) => {
             e.preventDefault();
-            keybinds[action] = e.code;
-            output.value = e.code;
-            document.removeEventListener("keydown", onKeydown);
+            // check if key is already bound
+            if (Object.values(keybinds).includes(e.code) && keybinds[action] !== e.code) {
+                console.log(keybinds[action], e.code);
+                output.style.color = "lightcoral";
+                output.value = "in use, try again";
+                // doesn't remove listener so user can try again
+            } else {
+                keybinds[action] = e.code;
+                updateKeyMap();
+                output.style.color = "inherit";
+                output.value = e.code;
+                document.removeEventListener("keydown", onKeydown);
+            }
         };
         document.addEventListener("keydown", onKeydown);
     });
@@ -173,6 +192,8 @@ resetKeybindDefaultButton.addEventListener("click", () => {
         const output = button.previousElementSibling as HTMLOutputElement;
         output.value = keybinds[action];
     });
+    // update keyMap
+    updateKeyMap();
 });
 
 const resetKeybindGraceButton = document.getElementById("reset-keybind-grace-button") as HTMLButtonElement;
@@ -191,12 +212,7 @@ resetKeybindGraceButton.addEventListener("click", () => {
     });
 
     // update keyMap
-    keyMap[keybinds.left] = "left";
-    keyMap[keybinds.right] = "right";
-    keyMap[keybinds.harddrop] = "harddrop";
-    keyMap[keybinds.cw] = "cw";
-    keyMap[keybinds.ccw] = "ccw";
-    keyMap[keybinds["180"]] = "180";
+    updateKeyMap();
 });
 
 

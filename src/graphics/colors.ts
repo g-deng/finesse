@@ -6,7 +6,7 @@ export const palette = {
   Z: "#d84545ff",
   J: "#3171dfff",
   L: "#df990eff", 
-  target: "#ffffff",
+  ghost: "#ffffff",
 
   grid: "#646464ff",
   bg: "#000000",

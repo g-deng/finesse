@@ -5,12 +5,32 @@ const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
 const ctx = canvas.getContext("2d")!;
 const grid = 30;
 
-
 /**
  * Draw a filled rectangle given grid coordinates (1-indexed, bottom-left origin)
  */
 function fillRect(x: number, y: number, w: number, h: number) {
   ctx.fillRect((x - 1) * grid, (20 - y - h + 1) * grid, w * grid, h * grid);
+}
+
+/**
+ * Draw a stroked rectangle given grid coordinates (1-indexed, bottom-left origin)
+ */
+function strokeRect(x: number, y: number, w: number, h: number) {
+  ctx.strokeRect((x - 1) * grid, (20 - y - h + 1) * grid, w * grid, h * grid);
+}
+
+/**
+ * Take in a list of x,y grid coordinates (1-indexed, bottom-left) and stroke a line through them. 
+ * Coords refer to the bottom left corner of each grid cell.
+ */
+function strokeLine(points: [number, number][]) {
+  // if (points.length < 2) return;
+  ctx.beginPath();
+  ctx.moveTo((points[0][0] - 1) * grid, (20 - points[0][1] + 1) * grid);
+  for (let i = 0; i < points.length; i++) {
+    ctx.lineTo((points[i][0] - 1) * grid, (20 - points[i][1] + 1) * grid);
+  }
+  ctx.stroke();
 }
 
 abstract class Block {
@@ -30,18 +50,29 @@ abstract class Block {
   getDirection(): Direction {
     return this.direction;
   }
-  drawBlock(): void {
-    ctx.fillStyle = palette[this.shape];
-    ctx.globalAlpha = 1;
+  drawBlock(alpha: number = 1, color?: string): void {
+    ctx.fillStyle = color ?? palette[this.shape];
+    ctx.globalAlpha = alpha;
     this.draw(this.x, this.y, this.direction);
   }
+  drawOutline(alpha: number = 1, color?: string): void {
+    ctx.strokeStyle = color ?? palette[this.shape];
+    ctx.lineWidth = 4;
+    ctx.globalAlpha = alpha;
+    this.outline(this.x, this.y, this.direction);
+  }
   drawGhost(): void {
-    ctx.fillStyle = palette[this.shape];
     ctx.globalAlpha = 0.5;
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    this.outline(this.x, 1, this.direction);
+    ctx.fillStyle = palette.ghost;
+    ctx.globalAlpha = 0.3;
     this.draw(this.x, 1, this.direction);
     ctx.globalAlpha = 1;
   }
   protected abstract draw(x: number, y: number, direction: Direction): void;
+  protected abstract outline(x: number, y: number, direction: Direction): void;
   abstract moveLeft(): void;
   abstract moveRight(): void;
   setY(y: number): void {
@@ -59,11 +90,14 @@ abstract class Block {
 }
 
 class OBlock extends Block {
-  constructor() {
-    super(5, 19, "O");
+  constructor(x?: number, y?: number) {
+    super(x ?? 5, y ?? 19, "O");
   }
   draw(x: number, y: number) {
     fillRect(x, y, 2, 2);
+  }
+  outline(x: number, y: number) {
+    strokeRect(x, y, 2, 2);
   }
   moveLeft() {
     if (this.x > 1) this.x -= 1;
@@ -71,13 +105,14 @@ class OBlock extends Block {
   moveRight() {
     if (this.x < 9) this.x += 1;
   }
-  rotateCW() {}
-  rotateCCW() {}
+  rotateCW() { }
+  rotateCCW() { }
 }
 
 class IBlock extends Block {
-  constructor() {
-    super(4, 19, "I");
+  constructor(x?: number, y?: number, direction?: Direction) {
+    super(x ?? 4, y ?? 19, "I");
+    this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
     switch (direction) {
@@ -88,6 +123,18 @@ class IBlock extends Block {
       case "E":
       case "W":
         fillRect(x, y, 1, 4);
+        break;
+    }
+  }
+  outline(x: number, y: number, direction: Direction) {
+    switch (direction) {
+      case "N":
+      case "S":
+        strokeRect(x, y, 4, 1);
+        break;
+      case "E":
+      case "W":
+        strokeRect(x, y, 1, 4);
         break;
     }
   }
@@ -169,8 +216,9 @@ class IBlock extends Block {
 }
 
 class TBlock extends Block {
-  constructor() {
-    super(4, 19, "T");
+  constructor(x?: number, y?: number, direction?: Direction) {
+    super(x ?? 4, y ?? 19, "T");
+    this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
     switch (direction) {
@@ -189,6 +237,22 @@ class TBlock extends Block {
       case "W":
         fillRect(x + 1, y, 1, 3);
         fillRect(x, y + 1, 1, 1);
+        break;
+    }
+  }
+  outline(x: number, y: number, direction: Direction) {
+    switch (direction) {
+      case "N":
+        strokeLine([[x, y], [x + 3, y], [x + 3, y + 1], [x + 2, y + 1], [x + 2, y + 2], [x + 1, y + 2], [x + 1, y + 1], [x, y + 1], [x, y]]);
+        break;
+      case "E":
+        strokeLine([[x, y + 3], [x, y], [x + 1, y], [x + 1, y + 1], [x + 2, y + 1], [x + 2, y + 2], [x + 1, y + 2], [x + 1, y + 3], [x, y + 3]]);
+        break;
+      case "S":
+        strokeLine([[x, y + 2], [x + 3, y + 2], [x + 3, y + 1], [x + 2, y + 1], [x + 2, y], [x + 1, y], [x + 1, y + 1], [x, y + 1], [x, y + 2]]);
+        break;
+      case "W":
+        strokeLine([[x + 2, y], [x + 2, y + 3], [x + 1, y + 3], [x + 1, y + 2], [x, y + 2], [x, y + 1], [x + 1, y + 1], [x + 1, y], [x + 2, y]]);
         break;
     }
   }
@@ -258,8 +322,9 @@ class TBlock extends Block {
 }
 
 class JBlock extends Block {
-  constructor() {
-    super(4, 19, "J");
+  constructor(x?: number, y?: number, direction?: Direction) {
+    super(x ?? 4, y ?? 19, "J");
+    this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
     switch (direction) {
@@ -278,6 +343,22 @@ class JBlock extends Block {
       case "W":
         fillRect(x + 1, y, 1, 3);
         fillRect(x, y, 1, 1);
+        break;
+    }
+  }
+  outline(x: number, y: number, direction: Direction) {
+    switch (direction) {
+      case "N":
+        strokeLine([[x, y + 2], [x, y], [x + 3, y], [x + 3, y + 1], [x + 1, y + 1], [x + 1, y + 2], [x, y + 2]]);
+        break;
+      case "E":
+        strokeLine([[x, y + 3], [x, y], [x + 1, y], [x + 1, y + 2], [x + 2, y + 2], [x + 2, y + 3], [x, y + 3]]);
+        break;
+      case "S":
+        strokeLine([[x, y + 2], [x + 3, y + 2], [x + 3, y], [x + 2, y], [x + 2, y + 1], [x, y + 1], [x, y + 2]]);
+        break;
+      case "W":
+        strokeLine([[x + 2, y], [x + 2, y + 3], [x + 1, y + 3], [x + 1, y + 1], [x, y + 1], [x, y], [x + 2, y]]);
         break;
     }
   }
@@ -347,8 +428,9 @@ class JBlock extends Block {
 }
 
 class LBlock extends Block {
-  constructor() {
-    super(4, 19, "L");
+  constructor(x?: number, y?: number, direction?: Direction) {
+    super(x ?? 4, y ?? 19, "L");
+    this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
     switch (direction) {
@@ -367,6 +449,22 @@ class LBlock extends Block {
       case "W":
         fillRect(x + 1, y, 1, 3);
         fillRect(x, y + 2, 1, 1);
+        break;
+    }
+  }
+  outline(x: number, y: number, direction: Direction) {
+    switch (direction) {
+      case "N":
+        strokeLine([[x, y], [x, y + 1], [x + 2, y + 1], [x + 2, y + 2], [x + 3, y + 2], [x + 3, y], [x, y]]);
+        break;
+      case "E":
+        strokeLine([[x, y], [x, y + 3], [x + 1, y + 3], [x + 1, y + 1], [x + 2, y + 1], [x + 2, y], [x, y]]);
+        break;
+      case "S":
+        strokeLine([[x, y + 2], [x + 3, y + 2], [x + 3, y + 1], [x + 1, y + 1], [x + 1, y], [x, y], [x, y + 2]]);
+        break;
+      case "W":
+        strokeLine([[x, y + 3], [x + 2, y + 3], [x + 2, y], [x + 1, y], [x + 1, y + 2], [x, y + 2], [x, y + 3]]);
         break;
     }
   }
@@ -436,8 +534,9 @@ class LBlock extends Block {
 }
 
 class ZBlock extends Block {
-  constructor() {
-    super(4, 19, "Z");
+  constructor(x?: number, y?: number, direction?: Direction) {
+    super(x ?? 4, y ?? 19, "Z");
+    this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
     ctx.fillStyle = palette.Z;
@@ -451,6 +550,18 @@ class ZBlock extends Block {
       case "W":
         fillRect(x, y, 1, 2);
         fillRect(x + 1, y + 1, 1, 2);
+        break;
+    }
+  }
+  outline(x: number, y: number, direction: Direction) {
+    switch (direction) {
+      case "N":
+      case "S":
+        strokeLine([[x, y + 2], [x, y + 1], [x + 1, y + 1], [x + 1, y], [x + 3, y], [x + 3, y + 1], [x + 2, y + 1], [x + 2, y + 2], [x, y + 2]]);
+        break;
+      case "E":
+      case "W":
+        strokeLine([[x + 2, y + 3], [x + 2, y + 1], [x + 1, y + 1], [x + 1, y], [x, y], [x, y + 2], [x + 1, y + 2], [x + 1, y + 3], [x + 2, y + 3]]);
         break;
     }
   }
@@ -521,8 +632,9 @@ class ZBlock extends Block {
 
 
 class SBlock extends Block {
-  constructor() {
-    super(4, 19, "S");
+  constructor(x?: number, y?: number, direction?: Direction) {
+    super(x ?? 4, y ?? 19, "S");
+    this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
     ctx.fillStyle = palette.S;
@@ -536,6 +648,18 @@ class SBlock extends Block {
       case "W":
         fillRect(x + 1, y, 1, 2);
         fillRect(x, y + 1, 1, 2);
+        break;
+    }
+  }
+  outline(x: number, y: number, direction: Direction) {
+    switch (direction) {
+      case "N":
+      case "S":
+        strokeLine([[x, y], [x, y + 1], [x + 1, y + 1], [x + 1, y + 2], [x + 3, y + 2], [x + 3, y + 1], [x + 2, y + 1], [x + 2, y], [x, y]]);
+        break;
+      case "E":
+      case "W":
+        strokeLine([[x, y + 3], [x, y + 1], [x + 1, y + 1], [x + 1, y], [x + 2, y], [x + 2, y + 2], [x + 1, y + 2], [x + 1, y + 3], [x, y + 3]]);
         break;
     }
   }

@@ -3,8 +3,7 @@ import { drawGrid, drawPauseScreen } from "./graphics/grid.ts";
 import { consumeSequentials, consumeContinuous, setupKeyListeners, removeKeyListeners, type Action, type ExtendedAction } from "./keys.ts";
 import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
-import { getNextTarget, getRandomTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget, type FinesseTarget, resetTargetIndex, getTargetProgress } from "./combos.ts";
-import { drawTarget } from "./graphics/targets.ts";
+import { getNextTarget, getRandomTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget, type FinesseTarget, resetTargetIndex, getTargetProgress, createBlockFromTarget } from "./combos.ts";
 import { createIcons, icons } from "lucide";
 import { randomizeMode, showFinesseHint, showGhost, dropInterval } from "./settings.ts";
 
@@ -26,6 +25,7 @@ const toIconHtml = (actions: ExtendedAction[]) =>
 
 
 let currentBlock: Block | null = null;
+let currentTargetBlock: Block | null = null;
 let currentTarget: Target | null = null;
 let isRedo = false;
 let finesseSequence: ExtendedAction[] | null = null;
@@ -60,6 +60,13 @@ function processAction(block: Block, action: Action) {
   }
 }
 
+export function nextBlock() {
+  currentBlock = null;
+  currentTarget = null;
+  finesseSequence = null;
+  accumulator = 0;
+}
+
 function update(delta: number) {
   if (!currentBlock) {
     let result: FinesseTarget | null = null;
@@ -69,43 +76,21 @@ function update(delta: number) {
       result = getNextTarget();
     }
     currentTarget = result?.target || null;
+    currentTargetBlock = createBlockFromTarget(currentTarget!);
     finesseSequence = result?.moves || null;
     currentBlock = getSpawnBlock(currentTarget!.shape);
   }
 
   accumulator += delta;
+  const drop = dropInterval > 1000 ? 0 : Math.floor(accumulator / dropInterval);
 
-  if (dropInterval > 1000) {
-    // no drop
-    if (currentBlock.getY() <= 1) {
-      // drop
-      // check if finesse was achieved
-      if (blockAtTarget(currentBlock, currentTarget!) && userSequence.length === finesseSequence!.length + 1) {
-        currentBlock = null;
-        currentTarget = null;
-        finesseSequence = null;
-        currentStreak += 1;
-        if (currentStreak > bestStreak) {
-          bestStreak = currentStreak;
-        }
-        isRedo = false;
-      } else {
-        currentBlock = getSpawnBlock(currentTarget!.shape);
-        currentStreak = 0;
-        isRedo = true;
-      }
-      userSequence.length = 0;
-    }
-  } else if (accumulator > dropInterval) {
-    const drop = Math.floor(accumulator / dropInterval);
-    accumulator = 0;
+  if (dropInterval > 1000 || accumulator > dropInterval) {
+    accumulator -= drop * dropInterval;
     if (currentBlock.getY() - drop <= 1) {
       // drop
       // check if finesse was achieved
       if (blockAtTarget(currentBlock, currentTarget!) && userSequence.length === finesseSequence!.length + 1) {
-        currentBlock = null;
-        currentTarget = null;
-        finesseSequence = null;
+        nextBlock();
         currentStreak += 1;
         if (currentStreak > bestStreak) {
           bestStreak = currentStreak;
@@ -210,22 +195,15 @@ function render() {
 
   drawGrid();
   if (currentBlock) {
-    currentBlock.drawBlock();
     if (showGhost) {
       currentBlock.drawGhost();
     }
+    currentBlock.drawBlock();
   }
 
   if (currentTarget) {
-    if (isVHBlock(currentTarget)) {
-      currentTarget = currentTarget as VHTarget;
-      drawTarget(currentTarget.shape, currentTarget.x, currentTarget.ori);
-    } else if (isNESWBlock(currentTarget)) {
-      currentTarget = currentTarget as NESWTarget;
-      drawTarget(currentTarget.shape, currentTarget.x, currentTarget.dir);
-    } else {
-      drawTarget(currentTarget.shape, currentTarget.x);
-    }
+    currentTargetBlock!.drawBlock(0.5);
+    currentTargetBlock!.drawOutline();
   }
 }
 

@@ -147,6 +147,27 @@ function blockAtTarget(block: Block, target: Target): boolean {
   }
 }
 
+function createBlockFromTarget(target: Target): Block {
+  switch (target.shape) {
+    case "I":
+      return new IBlock(target.x, 1, target.ori === "H" ? "N" : "E");
+    case "O":
+      return new OBlock(target.x, 1);
+    case "T":
+      return new TBlock(target.x, 1, target.dir);
+    case "S":
+      return new SBlock(target.x, 1, target.ori === "H" ? "N" : "E");
+    case "Z":
+      return new ZBlock(target.x, 1, target.ori === "H" ? "N" : "E");
+    case "J":
+      return new JBlock(target.x, 1, target.dir);
+    case "L":
+      return new LBlock(target.x, 1, target.dir);
+    default:
+      return new IBlock();
+  }
+}
+
 function getSpawnBlock(shape: string): Block {
   switch (shape) {
     case "I":
@@ -201,4 +222,4 @@ function getRandomTarget(): FinesseTarget | null {
   return activeTargets[randomIndex];
 }
 
-export { targets, isVHBlock, isNESWBlock, filterActiveTargets, getNextTarget, getRandomTarget, getSpawnBlock, blockAtTarget, resetTargetIndex, getTargetProgress };
+export { targets, isVHBlock, isNESWBlock, filterActiveTargets, getNextTarget, getRandomTarget, getSpawnBlock, blockAtTarget, resetTargetIndex, getTargetProgress, createBlockFromTarget };

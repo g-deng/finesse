@@ -1,12 +1,13 @@
 import { palette } from "./colors";
 import { showGridLines, showGridNumbers } from "../settings";
 
-export function drawGrid() {
-  const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
-  const ctx = canvas.getContext("2d")!;
+const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
+const ctx = canvas.getContext("2d")!;
+ctx.translate(2, 2); // to account for border
 
+export function drawGrid() {
   ctx.fillStyle = palette.bg;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(-2, -2, canvas.width + 4, canvas.height + 4);
 
   const cols = 10;
   const rows = 20;
@@ -26,7 +27,7 @@ export function drawGrid() {
     if (!showGridLines) continue;
     ctx.beginPath();
     ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
+    ctx.lineTo(x, canvas.height - 4);
     ctx.stroke();
   }
 
@@ -44,7 +45,7 @@ export function drawGrid() {
     if (!showGridLines) continue;
     ctx.beginPath();
     ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
+    ctx.lineTo(canvas.width - 4, y);
     ctx.stroke();
   }
 }

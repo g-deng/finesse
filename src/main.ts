@@ -5,7 +5,7 @@ import type { Target, NESWTarget, VHTarget } from "./types.ts";
 import { Block } from "./graphics/blocks.ts";
 import { getNextTarget, getRandomTarget, getSpawnBlock, isNESWBlock, isVHBlock, blockAtTarget, type FinesseTarget, resetTargetIndex, getTargetProgress, createBlockFromTarget } from "./combos.ts";
 import { createIcons, icons } from "lucide";
-import { randomizeMode, showFinesseHint, showGhost, dropInterval } from "./settings.ts";
+import { randomizeMode, showFinesseHint, showGhost, shadeTarget, dropInterval } from "./settings.ts";
 
 const actionIcon: Record<ExtendedAction, string> = {
   left: "arrow-left",
@@ -202,7 +202,7 @@ function render() {
   }
 
   if (currentTarget) {
-    currentTargetBlock!.drawBlock(0.5);
+    if (shadeTarget) currentTargetBlock!.drawBlock(0.5);
     currentTargetBlock!.drawOutline();
   }
 }

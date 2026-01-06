@@ -1,7 +1,7 @@
 import { type Shape } from "./types.js";
 import { filterActiveTargets } from "./combos.js";
 import type { Action } from "./keys.js";
-import { pauseGame } from "./main.js";
+import { nextBlock, pauseGame } from "./main.js";
 
 const settingsPanel = document.getElementById("settings-panel") as HTMLDivElement;
 settingsPanel.addEventListener("click", () => {
@@ -38,6 +38,7 @@ targetSelectElement.addEventListener("click", () => {
     selectedShapes.length = 0;
     selectedShapes.push(...getSelectedShapes());
     filterActiveTargets(selectedShapes);
+    nextBlock();
 });
 
 /* Settings */
@@ -96,12 +97,18 @@ resetHandlingGraceButton.addEventListener("click", () => {
 });
 
 export let showGhost = true;
+export let shadeTarget = false;
 export let showGridLines = true;
 export let showGridNumbers = true;
 export let showFinesseHint = true;
 const showGhostInput = document.getElementById("show-ghost") as HTMLInputElement;
 showGhostInput.addEventListener("input", () => {
     showGhost = showGhostInput.checked;
+});
+
+const shadeTargetInput = document.getElementById("shade-target") as HTMLInputElement;
+shadeTargetInput.addEventListener("input", () => {
+    shadeTarget = shadeTargetInput.checked;    
 });
 
 const showGridLinesInput = document.getElementById("show-grid-lines") as HTMLInputElement;
@@ -227,6 +234,7 @@ exportButton.addEventListener("click", () => {
         keybinds,
         showGhost,
         showGridLines,
+        shadeTarget,
         showGridNumbers,
         showFinesseHint,
         selectedShapes,
@@ -261,6 +269,7 @@ importFileInput.addEventListener("change", () => {
             if (!config.dropSpeed || config.dropSpeed < 0 || config.dropSpeed > 20) throw new Error("Invalid dropSpeed value");
             if (typeof config.keybinds !== "object") throw new Error("Invalid keybinds");
             if (typeof config.showGhost !== "boolean") throw new Error("Invalid showGhost value");
+            if (typeof config.shadeTarget !== "boolean") throw new Error("Invalid shadeTarget value");
             if (typeof config.showGridLines !== "boolean") throw new Error("Invalid showGridLines value");
             if (typeof config.showGridNumbers !== "boolean") throw new Error("Invalid showGridNumbers value");
             if (typeof config.showFinesseHint !== "boolean") throw new Error("Invalid showFinesseHint value");
@@ -278,6 +287,7 @@ importFileInput.addEventListener("change", () => {
             }
             Object.assign(keybinds, config.keybinds);
             showGhost = config.showGhost;
+            shadeTarget = config.shadeTarget;
             showGridLines = config.showGridLines;
             showGridNumbers = config.showGridNumbers;
             showFinesseHint = config.showFinesseHint;
@@ -285,6 +295,7 @@ importFileInput.addEventListener("change", () => {
             selectedShapes.push(...config.selectedShapes);
             filterActiveTargets(selectedShapes);
             randomizeMode = config.randomizeMode;
+            nextBlock();
 
             // update UI elements
             dasInput.value = DAS.toString();
@@ -297,6 +308,7 @@ importFileInput.addEventListener("change", () => {
             showGridLinesInput.checked = showGridLines;
             showGridNumbersInput.checked = showGridNumbers;
             showFinesseHintInput.checked = showFinesseHint;
+            shadeTargetInput.checked = shadeTarget;
             const checkboxes = targetSelectElement.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
             checkboxes.forEach((checkbox, index) => {
                 checkbox.checked = selectedShapes.includes(shapes[index]);

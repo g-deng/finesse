@@ -57,7 +57,7 @@ abstract class Block {
   }
   drawOutline(alpha: number = 1, color?: string): void {
     ctx.strokeStyle = color ?? palette[this.shape];
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 3;
     ctx.globalAlpha = alpha;
     this.outline(this.x, this.y, this.direction);
   }
@@ -539,7 +539,6 @@ class ZBlock extends Block {
     this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
-    ctx.fillStyle = palette.Z;
     switch (direction) {
       case "N":
       case "S":
@@ -637,7 +636,6 @@ class SBlock extends Block {
     this.direction = direction ?? "N";
   }
   draw(x: number, y: number, direction: Direction) {
-    ctx.fillStyle = palette.S;
     switch (direction) {
       case "N":
       case "S":

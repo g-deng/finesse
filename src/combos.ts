@@ -19,7 +19,7 @@ targets.push({ target: { shape: "O", x: 9 }, moves: ["dasRight"] });
 
 // I block horizontal
 targets.push({ target: { shape: "I", ori: "H", x: 1 }, moves: ["dasLeft"] });
-targets.push({ target: { shape: "I", ori: "H", x: 2 }, moves: ["dasLeft", "right"] });
+targets.push({ target: { shape: "I", ori: "H", x: 2 }, moves: ["left", "left"] });
 targets.push({ target: { shape: "I", ori: "H", x: 3 }, moves: ["left"] });
 targets.push({ target: { shape: "I", ori: "H", x: 4 }, moves: [] });
 targets.push({ target: { shape: "I", ori: "H", x: 5 }, moves: ["right"] });
@@ -53,7 +53,7 @@ for (const shape of ["S", "Z"] as const) {
 
     // horizontal
     targets.push({ target: { shape, ori: "H", x: 1 }, moves: ["dasLeft"] });
-    targets.push({ target: { shape, ori: "H", x: 2 }, moves: ["dasLeft", "right"] });
+    targets.push({ target: { shape, ori: "H", x: 2 }, moves: ["left", "left"] });
     targets.push({ target: { shape, ori: "H", x: 3 }, moves: ["left"] });
     targets.push({ target: { shape, ori: "H", x: 4 }, moves: [] });
     targets.push({ target: { shape, ori: "H", x: 5 }, moves: ["right"] });
@@ -67,7 +67,7 @@ for (const shape of ["S", "Z"] as const) {
 for (const shape of ["T", "L", "J"] as const) {
     // north
     targets.push({ target: { shape, dir: "N", x: 1 }, moves: ["dasLeft"] });
-    targets.push({ target: { shape, dir: "N", x: 2 }, moves: ["dasLeft", "right"] });
+    targets.push({ target: { shape, dir: "N", x: 2 }, moves: ["left", "left"] });
     targets.push({ target: { shape, dir: "N", x: 3 }, moves: ["left"] });
     targets.push({ target: { shape, dir: "N", x: 4 }, moves: [] });
     targets.push({ target: { shape, dir: "N", x: 5 }, moves: ["right"] });

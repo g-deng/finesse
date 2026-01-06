@@ -56,7 +56,7 @@ export function drawPauseScreen() {
   const ctx = canvas.getContext("2d")!;
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(-2, -2, canvas.width + 4, canvas.height + 4);
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "20px Arial";
